@@ -13,7 +13,6 @@
             "dependsOrder": "sequence",
             "dependsOn":[
                 "compile source",
-                "create libraries",
                 "create executable"
             ],
             "group": {
@@ -33,7 +32,8 @@
                 "isDefault": true
             },
             "dependsOn":[
-                "compile Paint.cpp"
+                "compile Paint.cpp",
+                "compile Screen.cpp"
             ]
         },
         {
@@ -57,12 +57,32 @@
         },
         {
             "type": "shell",
+            "label": "compile Screen.cpp",
+            "command": "cl.exe",
+            "args": [
+                "/c",
+                "/EHsc",
+                "/Fo:",
+                "${workspaceFolder}/bin/intermediates/Screen.obj",
+                "${workspaceFolder}/src/Screen.cpp"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
             "label": "create executable",
             "command": "cl.exe",
             "args": [
                 "/EHsc",
                 "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2main.lib",
                 "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2.lib",
+                "${workspaceFolder}/bin/intermediates/Screen.obj",
                 "/Fe:",
                 "${workspaceFolder}/bin/Paint.exe",
                 "${workspaceFolder}/bin/intermediates/Paint.obj"
