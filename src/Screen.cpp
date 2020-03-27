@@ -18,4 +18,6 @@ bool Screen::close() {
     SDL_DestroyTexture(m_texture);
     delete[] m_buffer;
     delete m_color;
+
+    return true;
 }

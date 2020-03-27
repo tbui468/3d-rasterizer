@@ -33,7 +33,8 @@
             },
             "dependsOn":[
                 "compile Paint.cpp",
-                "compile Screen.cpp"
+                "compile Screen.cpp",
+                "compile Input.cpp"
             ]
         },
         {
@@ -76,6 +77,25 @@
         },
         {
             "type": "shell",
+            "label": "compile Input.cpp",
+            "command": "cl.exe",
+            "args": [
+                "/c",
+                "/EHsc",
+                "/Fo:",
+                "${workspaceFolder}/bin/intermediates/Input.obj",
+                "${workspaceFolder}/src/Input.cpp"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
             "label": "create executable",
             "command": "cl.exe",
             "args": [
@@ -83,6 +103,7 @@
                 "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2main.lib",
                 "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2.lib",
                 "${workspaceFolder}/bin/intermediates/Screen.obj",
+                "${workspaceFolder}/bin/intermediates/Input.obj",
                 "/Fe:",
                 "${workspaceFolder}/bin/Paint.exe",
                 "${workspaceFolder}/bin/intermediates/Paint.obj"
