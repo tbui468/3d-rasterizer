@@ -1,0 +1,80 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "type": "shell",
+            "label": "build all",
+            "command": "echo",
+            "args": [
+                "build entire project"
+            ],
+            "dependsOrder": "sequence",
+            "dependsOn":[
+                "compile source",
+                "create libraries",
+                "create executable"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            } 
+        },
+        {
+            "type": "shell",
+            "label": "compile source",
+            "command": "echo",
+            "args": [
+                "compile source cpp files"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn":[
+                "compile Paint.cpp"
+            ]
+        },
+        {
+            "type": "shell",
+            "label": "compile Paint.cpp",
+            "command": "cl.exe",
+            "args": [
+                "/c",
+                "/EHsc",
+                "/Fo:",
+                "${workspaceFolder}/bin/intermediates/Paint.obj",
+                "${workspaceFolder}/src/Paint.cpp"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "type": "shell",
+            "label": "create executable",
+            "command": "cl.exe",
+            "args": [
+                "/EHsc",
+                "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2main.lib",
+                "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2.lib",
+                "/Fe:",
+                "${workspaceFolder}/bin/Paint.exe",
+                "${workspaceFolder}/bin/intermediates/Paint.obj"
+            ],
+            "problemMatcher": [
+                "$msCompile"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+
+    ]
+}
