@@ -9,9 +9,12 @@ int main(int argc, char* argv[]) {
 
     Screen* screen = new Screen(800, 600);
     screen->init();
-    Input* input;
+    Input* input = new Input();
 
-    std::cout << "Added input and screen" << std::endl;
+
+    while(input->process_events()) {
+
+    }
 
     screen->close();
     SDL_Quit();
