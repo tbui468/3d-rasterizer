@@ -23,6 +23,7 @@ public:
     void set_color(uint8_t t_red, uint8_t t_green, uint8_t t_blue);
     void set_alpha(int8_t t_alpha);
     void draw_background();
+    void draw_pixel(int t_x_coordinate, int t_y_coordinate);
 };
 
 #endif //SCREEN_H

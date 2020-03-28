@@ -21,6 +21,8 @@ bool Screen::init() {
     m_buffer = new uint32_t[SCREEN_WIDTH * SCREEN_HEIGHT];
     set_color(200, 150, 100);
     draw_background();
+    set_color(255,255,255);
+    draw_pixel(400, 300);
     update_screen();
     return true;
 }
@@ -56,4 +58,8 @@ void Screen::draw_background() {
             m_buffer[row * SCREEN_WIDTH + col] = m_color;
         }
     }
+}
+
+void Screen::draw_pixel(int t_x_coordinate, int t_y_coordinate) {
+    m_buffer[t_y_coordinate * SCREEN_WIDTH + t_x_coordinate] = m_color;
 }
