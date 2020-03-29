@@ -19,10 +19,8 @@ bool Screen::init() {
         return false;
     }
     m_buffer = new uint32_t[SCREEN_WIDTH * SCREEN_HEIGHT];
-    set_color(200, 150, 100);
-    draw_background();
     set_color(255,255,255);
-    draw_pixel(400, 300);
+    draw_background();
     update_screen();
     return true;
 }

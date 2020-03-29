@@ -11,7 +11,9 @@ int main(int argc, char* argv[]) {
     screen->init();
     Input* input = new Input();
 
-
+    screen->set_color(200, 255 , 200);
+    screen->draw_background();
+    screen->update_screen();
     while(input->process_events()) {
 
     }

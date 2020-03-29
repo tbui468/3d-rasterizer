@@ -1,112 +1,24 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558 
-    // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
         {
             "type": "shell",
-            "label": "build all",
-            "command": "echo",
-            "args": [
-                "build entire project"
-            ],
-            "dependsOrder": "sequence",
-            "dependsOn":[
-                "compile source",
-                "create executable"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            } 
-        },
-        {
-            "type": "shell",
-            "label": "compile source",
-            "command": "echo",
-            "args": [
-                "compile source cpp files"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "dependsOn":[
-                "compile Paint.cpp",
-                "compile Screen.cpp",
-                "compile Input.cpp"
-            ]
-        },
-        {
-            "type": "shell",
-            "label": "compile Paint.cpp",
+            "label": "compile sources",
             "command": "cl.exe",
             "args": [
-                "/c",
                 "/EHsc",
+                "/O2",
                 "/Fo:",
-                "${workspaceFolder}/bin/intermediates/Paint.obj",
-                "${workspaceFolder}/src/Paint.cpp"
-            ],
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "shell",
-            "label": "compile Screen.cpp",
-            "command": "cl.exe",
-            "args": [
-                "/c",
-                "/EHsc",
-                "/Fo:",
-                "${workspaceFolder}/bin/intermediates/Screen.obj",
-                "${workspaceFolder}/src/Screen.cpp"
-            ],
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "shell",
-            "label": "compile Input.cpp",
-            "command": "cl.exe",
-            "args": [
-                "/c",
-                "/EHsc",
-                "/Fo:",
-                "${workspaceFolder}/bin/intermediates/Input.obj",
-                "${workspaceFolder}/src/Input.cpp"
-            ],
-            "problemMatcher": [
-                "$msCompile"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "type": "shell",
-            "label": "create executable",
-            "command": "cl.exe",
-            "args": [
-                "/EHsc",
-                "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2main.lib",
-                "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2.lib",
-                "${workspaceFolder}/bin/intermediates/Screen.obj",
-                "${workspaceFolder}/bin/intermediates/Input.obj",
+                "${workspaceFolder}/bin/intermediates/",
                 "/Fe:",
                 "${workspaceFolder}/bin/Paint.exe",
-                "${workspaceFolder}/bin/intermediates/Paint.obj"
+                "${workspaceFolder}/src/Paint.cpp",
+                "${workspaceFolder}/src/Screen.cpp",
+                "${workspaceFolder}/src/Input.cpp",
+                "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2main.lib",
+                "${workspaceFolder}/dependencies/SDL2/lib/x86/SDL2.lib",
+                "/link",
+                "/machine:x86"
             ],
             "problemMatcher": [
                 "$msCompile"
@@ -116,6 +28,5 @@
                 "isDefault": true
             }
         }
-
     ]
 }
