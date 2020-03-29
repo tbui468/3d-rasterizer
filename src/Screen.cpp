@@ -19,6 +19,8 @@ bool Screen::init() {
         return false;
     }
     m_buffer = new uint32_t[SCREEN_WIDTH * SCREEN_HEIGHT];
+
+    SDL_SetWindowBordered(m_window, SDL_TRUE);
     set_color(255,255,255);
     draw_background();
     update_screen();
