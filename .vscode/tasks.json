@@ -12,6 +12,7 @@
                 "${workspaceFolder}/bin/intermediates/",
                 "/Fe:",
                 "${workspaceFolder}/bin/Paint.exe",
+                "/std:c++17",
                 "${workspaceFolder}/src/Paint.cpp",
                 "${workspaceFolder}/src/Screen.cpp",
                 "${workspaceFolder}/src/Mouse.cpp",

@@ -6,8 +6,7 @@
 class Keyboard: public InputDevice {
 private:
 public:
-    bool process_events() override;
-
+    std::optional<std::vector<int>*> process_events() override;
 };
 
 #endif //KEYBOARD_H
