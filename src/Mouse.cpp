@@ -11,3 +11,10 @@ bool Mouse::process_events() {
     }
     return true;
 }
+
+MouseCoordinates Mouse::get_mouse_coordinates() {
+    int x;
+    int y;
+    SDL_GetMouseState(&x, &y);
+    return MouseCoordinates {x, y};
+}

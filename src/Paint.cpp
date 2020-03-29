@@ -16,7 +16,17 @@ int main(int argc, char* argv[]) {
     screen->draw_background();
     screen->update_screen();
     while(mouse->process_events()) {
-
+        int mouse_x;
+        int mouse_y;
+        MouseCoordinates coordinates = mouse->get_mouse_coordinates();
+        mouse_x = coordinates.x;
+        mouse_y = coordinates.y;
+        if (mouse_x < 400)
+            screen->set_color(0, 0, 0);
+        else
+            screen->set_color(255, 255, 255);
+        screen->draw_background();
+        screen->update_screen();
     }
 
     screen->close();
