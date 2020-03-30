@@ -2,6 +2,7 @@
 #include <iostream>
 #define SDL_MAIN_HANDLED //there is a main in SDL_main.h that causes Linker entry point error without this #define
 #include "../dependencies/SDL2/include/SDL.h"
+#include "Coordinates.h"
 #include "Screen.h"
 #include "UserInput.h"
 
@@ -15,35 +16,46 @@ int main(int argc, char *argv[])
     screen->set_color(200, 255, 200);
     screen->draw_background();
     screen->update_screen();
-    UserInput* mouse = new UserInput();;
-    std::optional<std::vector<int>*> v;
+    UserInput *mouse = new UserInput();
+    ;
+    std::optional<std::vector<int> *> v;
     while (v = mouse->process_events())
     {
 
         if (v.has_value())
         {
             auto inputs = v.value();
-            for (int input : *inputs)
+            //            for (int input : *inputs)
+            for (unsigned int i = 0; i < inputs->size(); ++i)
             {
+                int input = inputs->at(i);
                 switch (input)
                 {
+                case Inputs::WindowClose: {
+                    //++i;
+                    std::cout << "close window event" << std::endl;
+                    //int windowID = 0;
+                    int windowID = inputs->at(i + 1);
+                    screen->close_window(windowID);
+                    break;
+                }
                 case Inputs::KeyUp:
-                    screen->set_color(0,0,0);
+                    screen->set_color(0, 0, 0);
                     break;
                 case Inputs::KeyDown:
-                    screen->set_color(255,255,0);
+                    screen->set_color(255, 255, 0);
                     break;
                 case Inputs::KeyLeft:
-                    screen->set_color(255,0,255);
+                    screen->set_color(255, 0, 255);
                     break;
                 case Inputs::KeyRight:
-                    screen->set_color(0,255,255);
+                    screen->set_color(0, 255, 255);
                     break;
                 case Inputs::MouseLeft:
-                    screen->set_color(0,55,25);
+                    screen->set_color(0, 55, 25);
                     break;
                 case Inputs::MouseRight:
-                    screen->set_color(200,25,155);
+                    screen->set_color(0, 0, 0);
                     break;
                 default:
                     break;

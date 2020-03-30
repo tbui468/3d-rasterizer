@@ -11,6 +11,16 @@ std::optional<std::vector<int>*> UserInput::process_events()
         {
             return std::nullopt;
         }
+        else if (event.type == SDL_WINDOWEVENT) {
+            switch(event.window.event) {
+                case SDL_WINDOWEVENT_CLOSE:
+                    m_user_inputs->push_back(Inputs::WindowClose);
+                    m_user_inputs->push_back(event.window.windowID);
+                break;
+                default:
+                break;
+            }
+        }
         else if (event.type == SDL_MOUSEBUTTONDOWN)
         {
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
@@ -51,10 +61,10 @@ std::optional<std::vector<int>*> UserInput::process_events()
     return m_user_inputs;
 }
 
-MouseCoordinates UserInput::get_mouse_coordinates()
+Coordinates UserInput::get_mouse_coordinates()
 {
     int x;
     int y;
     SDL_GetMouseState(&x, &y);
-    return MouseCoordinates{x, y};
+    return Coordinates{x, y};
 }

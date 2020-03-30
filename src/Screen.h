@@ -8,6 +8,7 @@ class Screen
 {
 private:
     SDL_Window* m_window;
+    SDL_Window* m_window2;
     SDL_Renderer* m_renderer;
     SDL_Texture* m_texture;
     uint32_t* m_buffer;
@@ -15,11 +16,12 @@ private:
     const int SCREEN_WIDTH;
     const int SCREEN_HEIGHT;
 public:
-    Screen(int t_width, int t_height): m_window(nullptr), m_renderer(nullptr), m_texture(nullptr), 
+    Screen(int t_width, int t_height): m_window(nullptr), m_window2(nullptr), m_renderer(nullptr), m_texture(nullptr), 
             m_buffer(nullptr), m_color(0x00000000), SCREEN_WIDTH(t_width), SCREEN_HEIGHT(t_height) {};
     bool init();
     void update_screen();
     bool close();
+    bool close_window(uint32_t id);
     void set_color(uint8_t t_red, uint8_t t_green, uint8_t t_blue);
     void set_alpha(int8_t t_alpha);
     void draw_background();

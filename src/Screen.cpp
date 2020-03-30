@@ -5,6 +5,10 @@ bool Screen::init() {
     if(m_window == nullptr) {
         return false;
     }
+    m_window2 = SDL_CreateWindow("Paint2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, 0);
+    if(m_window2 == nullptr) {
+        return false;
+    }
     //create renderer
     m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_PRESENTVSYNC);
     if(m_renderer == nullptr) {
@@ -49,6 +53,14 @@ bool Screen::close() {
     SDL_DestroyTexture(m_texture);
     delete[] m_buffer;
 
+    return true;
+}
+
+bool Screen::close_window(uint32_t id) {
+    if(id == SDL_GetWindowID(m_window))
+        SDL_DestroyWindow(m_window);
+    if(id == SDL_GetWindowID(m_window2))
+        SDL_DestroyWindow(m_window2);
     return true;
 }
 
