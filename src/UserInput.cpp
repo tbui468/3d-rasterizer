@@ -1,7 +1,8 @@
 #include "UserInput.h"
-#include "../dependencies/SDL2/include/SDL.h"
 
-std::optional<std::vector<int>*> UserInput::process_events()
+//returns an vector of user inputs
+//inputs are InputPair struct (defined in header file) 
+std::vector<InputInfo>* UserInput::process_events()
 {
     SDL_Event event;
     m_user_inputs->clear();
@@ -9,13 +10,12 @@ std::optional<std::vector<int>*> UserInput::process_events()
     {
         if (event.type == SDL_QUIT)
         {
-            return std::nullopt;
+            return m_user_inputs; //return empty input vector
         }
         else if (event.type == SDL_WINDOWEVENT) {
             switch(event.window.event) {
                 case SDL_WINDOWEVENT_CLOSE:
-                    m_user_inputs->push_back(Inputs::WindowClose);
-                    m_user_inputs->push_back(event.window.windowID);
+                    m_user_inputs->push_back(InputInfo {WindowClose, event.window.windowID});
                 break;
                 default:
                 break;
@@ -24,38 +24,38 @@ std::optional<std::vector<int>*> UserInput::process_events()
         else if (event.type == SDL_MOUSEBUTTONDOWN)
         {
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
-                m_user_inputs->push_back(Inputs::MouseLeft);
+                m_user_inputs->push_back(InputInfo {MouseLeft, 0});
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_MIDDLE))
-                m_user_inputs->push_back(Inputs::MouseMiddle);
+                m_user_inputs->push_back(InputInfo {MouseMiddle, 0});
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))
-                m_user_inputs->push_back(Inputs::MouseRight);
+                m_user_inputs->push_back(InputInfo {MouseRight, 0});
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_X1))
-                m_user_inputs->push_back(Inputs::MouseAltOne);
+                m_user_inputs->push_back(InputInfo {MouseAltOne, 0});
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_X2))
-                m_user_inputs->push_back(Inputs::MouseAltTwo);
+                m_user_inputs->push_back(InputInfo {MouseAltTwo, 0});
         }
         else if (event.type == SDL_MOUSEWHEEL)
         {
             if (event.wheel.y > 0)
-                m_user_inputs->push_back(Inputs::WheelUp);
+                m_user_inputs->push_back(InputInfo {WheelUp, 0});
             if (event.wheel.y < 0)
-                m_user_inputs->push_back(Inputs::WheelDown);
+                m_user_inputs->push_back(InputInfo {WheelDown, 0});
             if (event.wheel.x > 0)
-                m_user_inputs->push_back(Inputs::WheelRight);
+                m_user_inputs->push_back(InputInfo {WheelRight,0 });
             if (event.wheel.x < 0)
-                m_user_inputs->push_back(Inputs::WheelLeft);
+                m_user_inputs->push_back(InputInfo {WheelLeft, 0});
         }
         else if (event.type == SDL_KEYDOWN)
         {
             int key = event.key.keysym.sym;
             if (key == SDLK_DOWN)
-                m_user_inputs->push_back(Inputs::KeyDown);
+                m_user_inputs->push_back(InputInfo {KeyDown, 0});
             if (key == SDLK_UP)
-                m_user_inputs->push_back(Inputs::KeyUp);
+                m_user_inputs->push_back(InputInfo {KeyUp, 0});
             if (key == SDLK_LEFT)
-                m_user_inputs->push_back(Inputs::KeyLeft);
+                m_user_inputs->push_back(InputInfo {KeyLeft, 0});
             if (key == SDLK_RIGHT)
-                m_user_inputs->push_back(Inputs::KeyRight);
+                m_user_inputs->push_back(InputInfo {KeyRight, 0});
         }
     }
     return m_user_inputs;
