@@ -29,6 +29,9 @@ public:
     void draw_background();
     void draw_pixel(int t_x_coordinate, int t_y_coordinate);
     void DrawRectangle(Coordinates topLeft, Coordinates bottomRight);
+    SDL_Window* GetActiveWindow();
+    SDL_Window* GetMainWindow() {return m_window;};
+    SDL_Window* GetColorWindow() {return m_window2;};
 };
 
 #endif //SCREEN_H

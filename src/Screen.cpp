@@ -112,3 +112,12 @@ void Screen::DrawRectangle(Coordinates topLeft, Coordinates bottomRight) {
         }
     }
 }
+
+SDL_Window* Screen::GetActiveWindow() {
+    if((SDL_GetWindowFlags(m_window) & SDL_WINDOW_MOUSE_FOCUS) && (SDL_GetWindowFlags(m_window) & SDL_WINDOW_INPUT_FOCUS))
+        return m_window;
+    if((SDL_GetWindowFlags(m_window2) & SDL_WINDOW_MOUSE_FOCUS) && (SDL_GetWindowFlags(m_window2) & SDL_WINDOW_INPUT_FOCUS))
+        return m_window2;
+
+    return nullptr;
+}

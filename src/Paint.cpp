@@ -34,18 +34,10 @@ Extra features
 Save image as a .png strip
 Load images
 
-WEDNESDAY
-*************************
-Button is drawn to screen.  Now make it interact with mouse hover and click
-
-Wednesday
-************************
-Have working customize color submenu
 
 THURSDAY & FRIDAY
 *************************
-Working canvas tabs, up to 8
-animation between tabs
+Out of focus window button is still reacting to mouse.  Is this okay???
 
 SATURDAY
 ******************
@@ -90,8 +82,7 @@ int main(int argc, char *argv[])
     screen->set_color(200, 255, 200);
     screen->draw_background();
     screen->update_screen();
-    Button button(screen, nullptr, Coordinates {0,0}, 100,50,
-        0,0,0,0);
+    Button button(screen->GetMainWindow(), Coordinates {0,0}, 100,50);
     UserInput *userInput = new UserInput();
     bool runLoop = true;
     while (runLoop)
@@ -119,9 +110,16 @@ int main(int argc, char *argv[])
                 break;
             }
         }
+        if(button.MouseHover(screen->GetActiveWindow(), userInput->get_mouse_coordinates())) {
+            button.ChangeState(ButtonState::Hover);
+        }else{
+            button.ChangeState(ButtonState::Idle);
+        }
+        
+
         screen->set_color(200,255,200);
         screen->draw_background();
-        button.renderButton(); 
+        button.renderButton(screen); 
         screen->update_screen();
     }
     screen->close();
