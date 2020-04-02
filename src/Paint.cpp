@@ -37,7 +37,7 @@ Load images
 
 THURSDAY & FRIDAY
 *************************
-Out of focus window button is still reacting to mouse.  Is this okay???
+CMake works (mostly).  SDL2.dll is not in same directory as Paint.exe.  Need to automatically put that in using CMake.
 
 SATURDAY
 ******************
