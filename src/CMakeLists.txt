@@ -20,3 +20,9 @@ add_executable(
 
 target_link_directories(Paint PRIVATE "${CMAKE_SOURCE_DIR}/dependencies/SDL2/lib/x64")
 target_link_libraries(Paint PRIVATE SDL2.dll SDL2.lib SDL2main.lib)
+
+add_custom_command(TARGET Paint
+                    POST_BUILD COMMAND
+                    ${CMAKE_COMMAND} -E copy_if_different
+                    "${CMAKE_SOURCE_DIR}/dependencies/SDL2/lib/x64/SDL2.dll"
+                    $<TARGET_FILE_DIR:Paint>)

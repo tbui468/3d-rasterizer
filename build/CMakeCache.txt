@@ -200,15 +200,6 @@ Paint_BINARY_DIR:STATIC=C:/dev/Paint/build
 //Value Computed by CMake
 Paint_SOURCE_DIR:STATIC=C:/dev/Paint
 
-//Path to a library.
-SDL:FILEPATH=SDL-NOTFOUND
-
-//The directory containing a CMake configuration file for SDL2.
-SDL2_DIR:PATH=SDL2_DIR-NOTFOUND
-
-//Path to a library.
-SDLLibs:FILEPATH=SDLLibs-NOTFOUND
-
 
 ########################
 # INTERNAL cache entries
