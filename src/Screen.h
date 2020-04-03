@@ -2,36 +2,35 @@
 #define SCREEN_H
 
 #define SDL_MAIN_HANDLED //there is a main in SDL_main.h that causes Linker entry point error without this #define
-#include "../dependencies/SDL2/include/SDL.h"
+#include "SDL.h"
 #include "Coordinates.h"
 
 class Screen
 {
 private:
-    SDL_Window* m_window;
-    SDL_Window* m_window2; //rename later to colorPaletteWindow once button objects are complete
-    SDL_Renderer* m_renderer;
-    SDL_Texture* m_texture;
-    uint32_t* m_buffer;
-    uint32_t m_color;
-    const int SCREEN_WIDTH;
-    const int SCREEN_HEIGHT;
+    SDL_Window* m_window {nullptr};
+    SDL_Window* m_window2 {nullptr}; //rename later to colorPaletteWindow once button objects are complete
+    SDL_Renderer* m_renderer {nullptr};
+    SDL_Texture* m_texture {nullptr};
+    uint32_t* m_buffer {nullptr};
+    uint32_t m_color {0x00000000};
+    const int SCREEN_WIDTH {0};
+    const int SCREEN_HEIGHT {0};
 public:
-    Screen(int t_width, int t_height): m_window(nullptr), m_window2(nullptr), m_renderer(nullptr), m_texture(nullptr), 
-            m_buffer(nullptr), m_color(0x00000000), SCREEN_WIDTH(t_width), SCREEN_HEIGHT(t_height) {};
+    Screen(int t_width, int t_height): SCREEN_WIDTH(t_width), SCREEN_HEIGHT(t_height) {};
     bool init();
-    void update_screen();
+    void updateScreen();
     bool close();
-    bool close_window(uint32_t id);
-    void set_color(uint8_t t_red, uint8_t t_green, uint8_t t_blue);
-    void set_color(uint32_t);
-    void set_alpha(int8_t t_alpha);
-    void draw_background();
-    void draw_pixel(int t_x_coordinate, int t_y_coordinate);
-    void DrawRectangle(Coordinates topLeft, Coordinates bottomRight);
-    SDL_Window* GetActiveWindow();
-    SDL_Window* GetMainWindow() {return m_window;};
-    SDL_Window* GetColorWindow() {return m_window2;};
+    bool closeWindow(uint32_t t_id);
+    void setColor(uint8_t t_red, uint8_t t_green, uint8_t t_blue);
+    void setColor(uint32_t);
+    void drawBackground();
+    void drawPixel(int t_xCoordinate, int t_yCoordinate);
+    void drawRectangle(Coordinates t_topLeft, Coordinates t_bottomRight);
+    SDL_Window* getActiveWindow();
+    SDL_Window* getMainWindow() const {return m_window;}; //do i need this?
+    SDL_Window* getColorWindow() const {return m_window2;};// do i need this?
+    void closeWindow(SDL_Window* t_window); //similar function above.  Need to 
 };
 
 #endif //SCREEN_H

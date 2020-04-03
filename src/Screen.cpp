@@ -22,23 +22,21 @@ bool Screen::init() {
         SDL_DestroyWindow(m_window);
         return false;
     }
+
     m_buffer = new uint32_t[SCREEN_WIDTH * SCREEN_HEIGHT];
 
     SDL_SetWindowBordered(m_window, SDL_TRUE);
-    set_color(255,255,255);
-    draw_background();
-    update_screen();
     return true;
 }
 
-void Screen::update_screen() {
+void Screen::updateScreen() {
     SDL_UpdateTexture(m_texture, nullptr, m_buffer, SCREEN_WIDTH * sizeof(uint32_t));
     SDL_RenderClear(m_renderer);
     SDL_RenderCopy(m_renderer, m_texture, nullptr, nullptr);
     SDL_RenderPresent(m_renderer);
 }
 
-void Screen::set_color(uint8_t t_red, uint8_t t_green, uint8_t t_blue) {
+void Screen::setColor(uint8_t t_red, uint8_t t_green, uint8_t t_blue) {
     m_color = t_red;
     m_color <<= 8;
     m_color += t_green;
@@ -47,7 +45,7 @@ void Screen::set_color(uint8_t t_red, uint8_t t_green, uint8_t t_blue) {
     m_color <<= 8;
 }
 
-void Screen::set_color(uint32_t color) {
+void Screen::setColor(uint32_t color) {
     m_color = color;
 }
 
@@ -63,7 +61,7 @@ bool Screen::close() {
 
 //returns true if id is main window
 //returns false if not main window
-bool Screen::close_window(uint32_t id) {
+bool Screen::closeWindow(uint32_t id) {
     if(id == SDL_GetWindowID(m_window)){
         return true;
     }
@@ -73,7 +71,7 @@ bool Screen::close_window(uint32_t id) {
 }
 
 
-void Screen::draw_background() {
+void Screen::drawBackground() {
     for(int row = 0; row < SCREEN_HEIGHT; ++row) {
         for(int col = 0; col < SCREEN_WIDTH; ++col) {
             m_buffer[row * SCREEN_WIDTH + col] = m_color;
@@ -81,11 +79,11 @@ void Screen::draw_background() {
     }
 }
 
-void Screen::draw_pixel(int t_x_coordinate, int t_y_coordinate) {
+void Screen::drawPixel(int t_x_coordinate, int t_y_coordinate) {
     m_buffer[t_y_coordinate * SCREEN_WIDTH + t_x_coordinate] = m_color;
 }
 
-void Screen::DrawRectangle(Coordinates topLeft, Coordinates bottomRight) {
+void Screen::drawRectangle(Coordinates topLeft, Coordinates bottomRight) {
     int xStart = 0;
     int xEnd = 0;
     if(topLeft.x - bottomRight.x < 0) {
@@ -108,12 +106,12 @@ void Screen::DrawRectangle(Coordinates topLeft, Coordinates bottomRight) {
 
     for(int col = xStart; col < xEnd; ++col) {
         for(int row = yStart; row < yEnd; ++row) {
-            draw_pixel(col, row);
+            drawPixel(col, row);
         }
     }
 }
 
-SDL_Window* Screen::GetActiveWindow() {
+SDL_Window* Screen::getActiveWindow() {
     if((SDL_GetWindowFlags(m_window) & SDL_WINDOW_MOUSE_FOCUS) && (SDL_GetWindowFlags(m_window) & SDL_WINDOW_INPUT_FOCUS))
         return m_window;
     if((SDL_GetWindowFlags(m_window2) & SDL_WINDOW_MOUSE_FOCUS) && (SDL_GetWindowFlags(m_window2) & SDL_WINDOW_INPUT_FOCUS))

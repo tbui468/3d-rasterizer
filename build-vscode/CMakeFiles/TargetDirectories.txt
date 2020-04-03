@@ -1,0 +1,5 @@
+C:/dev/Paint/build-vscode/CMakeFiles/edit_cache.dir
+C:/dev/Paint/build-vscode/CMakeFiles/rebuild_cache.dir
+C:/dev/Paint/build-vscode/src/CMakeFiles/Paint.dir
+C:/dev/Paint/build-vscode/src/CMakeFiles/edit_cache.dir
+C:/dev/Paint/build-vscode/src/CMakeFiles/rebuild_cache.dir

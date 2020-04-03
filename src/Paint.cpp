@@ -37,7 +37,18 @@ Load images
 
 THURSDAY & FRIDAY
 *************************
-CMake works (mostly).  SDL2.dll is not in same directory as Paint.exe.  Need to automatically put that in using CMake.
+decouple UserInput and Screen classes.  UserInput should only return mouse inputs and close window (main, color, brush, etc) commands
+in other words, only returns an enum, not the InputInfo struct with window information. 
+The controller (Paint.cpp) can then take that input information (ex: CloseMainWindow or CloseColorWindow) and call the appropriate
+Screen function (close window(), with arguments or separate close window functions???) to close window
+
+-Move window code into its own class.  Screen class initializes SDL2 video.  Screen class has multiple window objects (Main, Color, Brush)
+wrap everything in namespace paint
+change all headers to .hpp files
+
+
+Button types: color (click to active.  One color button is always active, and only one.  Clicking one will deactivate the other)
+
 
 SATURDAY
 ******************
@@ -49,8 +60,9 @@ regular, erase, picker, fill
 */
 
 #include <iostream>
+#include <memory>
 #define SDL_MAIN_HANDLED //there is a main in SDL_main.h that causes Linker entry point error without this #define
-#include "../dependencies/SDL2/include/SDL.h"
+#include "SDL.h"
 #include "Coordinates.h"
 #include "Screen.h"
 #include "UserInput.h"
@@ -77,13 +89,10 @@ int main(int argc, char *argv[])
     SDL_Init(SDL_INIT_VIDEO);
     /***************************/
 
-    Screen *screen = new Screen(800, 600);
+    auto screen = std::make_unique<Screen>(800, 600);
     screen->init();
-    screen->set_color(200, 255, 200);
-    screen->draw_background();
-    screen->update_screen();
-    Button button(screen->GetMainWindow(), Coordinates {0,0}, 100,50);
-    UserInput *userInput = new UserInput();
+    Button button(screen->getMainWindow(), Coordinates {0,0}, 100,50);
+    auto userInput = std::make_unique<UserInput>();
     bool runLoop = true;
     while (runLoop)
     {
@@ -97,30 +106,31 @@ int main(int argc, char *argv[])
             {
                 std::cout << "close window event" << std::endl;
                 int windowID = input.optionalData;
-                runLoop = !(screen->close_window(windowID));
+                runLoop = !(screen->closeWindow(windowID));
                 break;
             }
             case Inputs::MouseLeft:
-                screen->set_color(0, 55, 25);
+                screen->setColor(0, 55, 25);
                 break;
             case Inputs::MouseRight:
-                screen->set_color(0, 0, 0);
+                screen->setColor(0, 0, 0);
                 break;
             default:
                 break;
             }
         }
-        if(button.MouseHover(screen->GetActiveWindow(), userInput->get_mouse_coordinates())) {
+        if(button.MouseHover(screen->getActiveWindow(), userInput->get_mouse_coordinates())) {
             button.ChangeState(ButtonState::Hover);
         }else{
             button.ChangeState(ButtonState::Idle);
         }
         
-
-        screen->set_color(200,255,200);
-        screen->draw_background();
+        ///need to reset color here.
+        //screen->setColor(10, 21, 29);
+        screen->setColor(25, 55, 73);
+        screen->drawBackground();
         button.renderButton(screen); 
-        screen->update_screen();
+        screen->updateScreen();
     }
     screen->close();
     /******************************/

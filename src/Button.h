@@ -1,7 +1,8 @@
 #ifndef BUTTON_H
 #define BUTTON_H
 
-#include "../dependencies/SDL2/include/SDL.h"
+//#include "../dependencies/SDL2/include/SDL.h"
+#include "SDL.h"
 #include "Coordinates.h"
 #include "Screen.h"
 
@@ -22,7 +23,7 @@ private:
 public:
     Button(SDL_Window* window, Coordinates coordinate, int width, int height) :
             m_window(window), m_topLeftCoordinates(coordinate), m_width(width), m_height(height) {};
-    bool MouseHover(SDL_Window* activeWindow, Coordinates mouseLocation) {
+    bool MouseHover(SDL_Window* activeWindow, Coordinates mouseLocation) const {
         if(activeWindow == nullptr)
             return false;
         uint32_t windowID = SDL_GetWindowID(m_window);
@@ -53,9 +54,16 @@ public:
             break;
         }
     }
-    void renderButton(Screen* screen) {
-        screen->set_color(m_color);
-        screen->DrawRectangle(m_topLeftCoordinates, Coordinates {m_topLeftCoordinates.x + m_width, m_topLeftCoordinates.y + m_height});
+
+    //updates button based on type and state
+    //includes rendering, and changing from active to idle for 
+    void update() {
+
+    }
+
+    void renderButton(std::unique_ptr<Screen>& screen) {
+        screen->setColor(m_color);
+        screen->drawRectangle(m_topLeftCoordinates, Coordinates {m_topLeftCoordinates.x + m_width, m_topLeftCoordinates.y + m_height});
     }
 
 };
