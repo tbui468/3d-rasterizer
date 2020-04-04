@@ -1,14 +1,9 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(Paint VERSION "1.0.0")
+project(Paint VERSION 1.0.0 LANGUAGES C CXX)
 
-message(STATUS "This is from the C:/dev/Paint directory")
-message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
-message(STATUS "CMAKE_CURRENT_BINARY_DIR: ${CMAKE_CURRENT_BINARY_DIR}")
-message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
-message(STATUS "CMAKE_BINARY_DIR: ${CMAKE_BINARY_DIR}")
-message(STATUS "CMAKE_CURRENT_LIST_DIR: ${CMAKE_CURRENT_LIST_DIR}")
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 17)
 
-include_directories(${CMAKE_SOURCE_DIR}/dependencies/SDL2/include)
 
 add_subdirectory(src)

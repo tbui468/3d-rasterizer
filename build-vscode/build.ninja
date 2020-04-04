@@ -67,7 +67,7 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 build cmake_object_order_depends_target_Paint: phony || src\CMakeFiles\Paint.dir
 
 build src\CMakeFiles\Paint.dir\Paint.cpp.obj: CXX_COMPILER__Paint ..\src\Paint.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -75,7 +75,7 @@ build src\CMakeFiles\Paint.dir\Paint.cpp.obj: CXX_COMPILER__Paint ..\src\Paint.c
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\Screen.cpp.obj: CXX_COMPILER__Paint ..\src\Screen.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -83,7 +83,7 @@ build src\CMakeFiles\Paint.dir\Screen.cpp.obj: CXX_COMPILER__Paint ..\src\Screen
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\UserInput.cpp.obj: CXX_COMPILER__Paint ..\src\UserInput.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -91,7 +91,7 @@ build src\CMakeFiles\Paint.dir\UserInput.cpp.obj: CXX_COMPILER__Paint ..\src\Use
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\Window.cpp.obj: CXX_COMPILER__Paint ..\src\Window.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -112,7 +112,7 @@ build src\Paint.exe: CXX_EXECUTABLE_LINKER__Paint src\CMakeFiles\Paint.dir\Paint
   LINK_LIBRARIES = SDL2.lib  SDL2.lib  SDL2main.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   LINK_PATH = -LIBPATH:C:\dev\Paint\dependencies\SDL2\lib\x86
   OBJECT_DIR = src\CMakeFiles\Paint.dir
-  POST_BUILD = cmd.exe /C "cd /D C:\dev\Paint\build-vscode\src && "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy_if_different C:/dev/Paint/dependencies/SDL2/lib/x86/SDL2.dll C:/dev/Paint/build-vscode/src"
+  POST_BUILD = cd .
   PRE_LINK = cd .
   TARGET_COMPILE_PDB = src\CMakeFiles\Paint.dir\
   TARGET_FILE = src\Paint.exe

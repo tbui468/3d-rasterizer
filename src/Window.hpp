@@ -1,8 +1,9 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
+#define SDL_MAIN_HANDLED
 #include "SDL.h"
-#include "Coordinates.h"
+#include "Coordinates.hpp"
 
 namespace paint
 {
@@ -22,12 +23,16 @@ private:
 
 public:
     Window(const char *t_title, int t_width, int t_height);
+    Window(const Window&) = delete;
+    Window& operator=(Window& other) = delete;
+    ~Window() {close();};
     bool initialize();
     bool close();
     void render();
     void setColor(uint8_t t_red, uint8_t t_green, uint8_t t_blue);
     void drawPixel(Coordinates t_coordinates);
     void drawRectangle(Coordinates t_topLeft, Coordinates t_bottomRight);
+    bool isActive() const;
 };
 
 } // namespace paint

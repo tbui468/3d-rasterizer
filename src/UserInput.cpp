@@ -1,21 +1,21 @@
-#include "UserInput.h"
+#include "UserInput.hpp"
 
 //returns an vector of user inputs
 //inputs are InputPair struct (defined in header file) 
-std::vector<InputInfo>* UserInput::process_events()
+const std::vector<Inputs>& UserInput::processEvents()
 {
     SDL_Event event;
-    m_user_inputs->clear();
+    m_user_inputs.clear();
     while (SDL_PollEvent(&event))
     {
         if (event.type == SDL_QUIT)
         {
-            return m_user_inputs; //return empty input vector
+            m_user_inputs.push_back(Inputs::CloseMainWindow);
         }
         else if (event.type == SDL_WINDOWEVENT) {
             switch(event.window.event) {
                 case SDL_WINDOWEVENT_CLOSE:
-                    m_user_inputs->push_back(InputInfo {WindowClose, event.window.windowID});
+                    m_user_inputs.push_back(Inputs::CloseColorWindow);
                 break;
                 default:
                 break;
@@ -24,17 +24,15 @@ std::vector<InputInfo>* UserInput::process_events()
         else if (event.type == SDL_MOUSEBUTTONDOWN)
         {
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT))
-                m_user_inputs->push_back(InputInfo {MouseLeft, 0});
-            if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_MIDDLE))
-                m_user_inputs->push_back(InputInfo {MouseMiddle, 0});
+                m_user_inputs.push_back(Inputs::MouseLeft);
             if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_RIGHT))
-                m_user_inputs->push_back(InputInfo {MouseRight, 0});
+                m_user_inputs.push_back(Inputs::MouseRight);
         }
     }
     return m_user_inputs;
 }
 
-Coordinates UserInput::get_mouse_coordinates() const
+Coordinates UserInput::getMouseCoordinates() const
 {
     int x;
     int y;
