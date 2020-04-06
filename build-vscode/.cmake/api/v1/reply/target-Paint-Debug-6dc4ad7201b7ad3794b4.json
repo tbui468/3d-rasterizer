@@ -15,11 +15,13 @@
 		[
 			"add_executable",
 			"target_link_directories",
+			"add_compile_options",
 			"target_include_directories"
 		],
 		"files" : 
 		[
-			"src/CMakeLists.txt"
+			"src/CMakeLists.txt",
+			"CMakeLists.txt"
 		],
 		"nodes" : 
 		[
@@ -39,7 +41,16 @@
 				"parent" : 0
 			},
 			{
+				"file" : 1
+			},
+			{
 				"command" : 2,
+				"file" : 1,
+				"line" : 6,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
 				"file" : 0,
 				"line" : 21,
 				"parent" : 0
@@ -55,13 +66,25 @@
 					"fragment" : "/DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd  "
 				},
 				{
+					"backtrace" : 4,
+					"fragment" : "/W4"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/permissive"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/w14640"
+				},
+				{
 					"fragment" : "-std:c++17"
 				}
 			],
 			"includes" : 
 			[
 				{
-					"backtrace" : 3,
+					"backtrace" : 5,
 					"path" : "C:/dev/Paint/dependencies/SDL2/include"
 				}
 			],

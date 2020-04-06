@@ -50,32 +50,32 @@ The CXX compiler identification is MSVC, found in "C:/dev/Paint/build-vscode/CMa
 Determining if the C compiler works passed with the following output:
 Change Dir: C:/dev/Paint/build-vscode/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_c05e0 && [1/2] Building C object CMakeFiles\cmTC_c05e0.dir\testCCompiler.c.obj
-[2/2] Linking C executable cmTC_c05e0.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_908ca && [1/2] Building C object CMakeFiles\cmTC_908ca.dir\testCCompiler.c.obj
+[2/2] Linking C executable cmTC_908ca.exe
 
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: C:/dev/Paint/build-vscode/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_f2b6c && [1/2] Building C object CMakeFiles\cmTC_f2b6c.dir\CMakeCCompilerABI.c.obj
-[2/2] Linking C executable cmTC_f2b6c.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_0f664 && [1/2] Building C object CMakeFiles\cmTC_0f664.dir\CMakeCCompilerABI.c.obj
+[2/2] Linking C executable cmTC_0f664.exe
 
 
 
 Determining if the CXX compiler works passed with the following output:
 Change Dir: C:/dev/Paint/build-vscode/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_fa65a && [1/2] Building CXX object CMakeFiles\cmTC_fa65a.dir\testCXXCompiler.cxx.obj
-[2/2] Linking CXX executable cmTC_fa65a.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_7850c && [1/2] Building CXX object CMakeFiles\cmTC_7850c.dir\testCXXCompiler.cxx.obj
+[2/2] Linking CXX executable cmTC_7850c.exe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: C:/dev/Paint/build-vscode/CMakeFiles/CMakeTmp
 
-Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_488af && [1/2] Building CXX object CMakeFiles\cmTC_488af.dir\CMakeCXXCompilerABI.cpp.obj
-[2/2] Linking CXX executable cmTC_488af.exe
+Run Build Command(s):C:/PROGRA~2/MICROS~2/2019/COMMUN~1/Common7/IDE/COMMON~1/MICROS~1/CMake/Ninja/ninja.exe cmTC_a94bf && [1/2] Building CXX object CMakeFiles\cmTC_a94bf.dir\CMakeCXXCompilerABI.cpp.obj
+[2/2] Linking CXX executable cmTC_a94bf.exe
 
 
 

@@ -10,7 +10,7 @@ namespace paint {
 class Screen
 {
 public:
-    static void initialize();
+    static bool initialize();
     static void close();
 };
 

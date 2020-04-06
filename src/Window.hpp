@@ -18,14 +18,11 @@ private:
     SDL_Window *m_window{nullptr};
     SDL_Renderer *m_renderer{nullptr};
     SDL_Texture *m_texture{nullptr};
-    uint32_t *m_buffer{nullptr};
+    Uint32 *m_buffer{nullptr};
     uint32_t m_color{0x00000000};
 
 public:
     Window(const char *t_title, int t_width, int t_height);
-    Window(const Window&) = delete;
-    Window& operator=(Window& other) = delete;
-    ~Window() {close();};
     bool initialize();
     bool close();
     void render();
@@ -33,6 +30,7 @@ public:
     void drawPixel(Coordinates t_coordinates);
     void drawRectangle(Coordinates t_topLeft, Coordinates t_bottomRight);
     bool isActive() const;
+    Uint32 getWindowID() const;
 };
 
 } // namespace paint

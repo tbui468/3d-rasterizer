@@ -44,30 +44,38 @@ TO DO: CLOSING WINDOWS IS NOT WORKING CORRECTLY.  USER INPUT SHOULD RETURN CLOSE
 using namespace paint;
 
 int main(int argc, char *argv[])
+//int main()
 {
+    std::cout << "Does this work?" << std::endl;
     Screen::initialize();
-
-    Window mainWindow("Paint", 800, 600);
-    Window colorWindow("Color", 400, 300);
+    Window mainWindow("Paint", 800, 600); //Why do i get segumenation fault when not using pointer????
+    Window colorWindow("Color", 300, 200);
 
     UserInput userinput;
     bool appOpen = true;
     while (appOpen)
     {
-        std::vector<Inputs> inputs = userinput.processEvents();
+        std::vector<Inputs> inputs = userinput.processEvents(mainWindow, colorWindow);
         for (Inputs input : inputs)
         {
             switch (input)
             {
-            case Inputs::MouseLeft:
+            case Inputs::MouseLeft: {
                 break;
-            case Inputs::MouseRight:
+            }
+            case Inputs::MouseRight: {
                 break;
-            case Inputs::CloseColorWindow:
+            }
+            case Inputs::CloseColorWindow: {
                 colorWindow.close();
                 break;
-            case Inputs::CloseMainWindow:
-            {
+            }
+            case Inputs::CloseMainWindow: {
+                mainWindow.close();
+                appOpen = false;
+                break;
+            }
+            case Inputs::CloseApplication: {
                 appOpen = false;
                 break;
             }
@@ -77,7 +85,10 @@ int main(int argc, char *argv[])
         }
     }
 
+    colorWindow.close();
     mainWindow.close();
     Screen::close();
+
+    std::cout << "SDL shutdown" << std::endl;
     return 0;
 }

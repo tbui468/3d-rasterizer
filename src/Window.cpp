@@ -5,6 +5,7 @@ namespace paint
 {
 
 Window::Window(const char *t_title, int t_width, int t_height) : m_title(t_title), M_WIDTH(t_width), M_HEIGHT(t_height){
+//    if(initialize())
     if(initialize())
         std::cout << "Window successfully initialized\n";
     else
@@ -34,7 +35,12 @@ bool Window::initialize()
         return false;
     }
 
-    m_buffer = new uint32_t[M_WIDTH * M_HEIGHT];
+    m_buffer = new Uint32[M_WIDTH * M_HEIGHT];
+	memset(m_buffer, 0, sizeof(Uint32) * M_WIDTH * M_HEIGHT);
+	SDL_UpdateTexture(m_texture, nullptr, m_buffer, M_WIDTH * sizeof(Uint32));
+	SDL_RenderClear(m_renderer);
+	SDL_RenderCopy(m_renderer, m_texture, nullptr, nullptr);
+	SDL_RenderPresent(m_renderer);
 
     SDL_SetWindowBordered(m_window, SDL_TRUE);
     return true;
@@ -42,12 +48,15 @@ bool Window::initialize()
 
 bool Window::close()
 {
-    SDL_DestroyWindow(m_window);
-    SDL_DestroyRenderer(m_renderer);
-    SDL_DestroyTexture(m_texture);
     delete[] m_buffer;
+    SDL_DestroyTexture(m_texture);
+    SDL_DestroyRenderer(m_renderer);
+    SDL_DestroyWindow(m_window);
 
-    std::cout << "Window closed\n";
+    m_buffer = nullptr;
+    m_texture = nullptr;
+    m_renderer = nullptr;
+    m_window = nullptr;
 
     return true;
 }
@@ -120,5 +129,10 @@ bool Window::isActive() const
     }
     return false;
 }
+
+Uint32 Window::getWindowID() const{
+    return SDL_GetWindowID(m_window);
+}
+
 
 } // namespace paint

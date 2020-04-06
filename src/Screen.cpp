@@ -3,8 +3,12 @@
 
 namespace paint {
 
-void Screen::initialize() {
-    SDL_Init(SDL_INIT_VIDEO);
+bool Screen::initialize() {
+    if(SDL_Init(SDL_INIT_VIDEO) < 0){
+        return false;
+    }else{
+        return true;
+    }
 }
 
 void Screen::close() {

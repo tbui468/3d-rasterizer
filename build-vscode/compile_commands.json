@@ -1,25 +1,25 @@
 [
 {
   "directory": "C:/dev/Paint/build-vscode",
-  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Paint.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Paint.cpp",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Paint.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Paint.cpp",
   "file": "C:/dev/Paint/src/Paint.cpp"
 },
 
 {
   "directory": "C:/dev/Paint/build-vscode",
-  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Screen.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Screen.cpp",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Screen.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Screen.cpp",
   "file": "C:/dev/Paint/src/Screen.cpp"
 },
 
 {
   "directory": "C:/dev/Paint/build-vscode",
-  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\UserInput.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\UserInput.cpp",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\UserInput.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\UserInput.cpp",
   "file": "C:/dev/Paint/src/UserInput.cpp"
 },
 
 {
   "directory": "C:/dev/Paint/build-vscode",
-  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Window.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Window.cpp",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Window.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Window.cpp",
   "file": "C:/dev/Paint/src/Window.cpp"
 }
 ]
