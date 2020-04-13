@@ -37,39 +37,42 @@ bool Window::initialize()
 
     m_buffer = new Uint32[M_WIDTH * M_HEIGHT];
 	memset(m_buffer, 0, sizeof(Uint32) * M_WIDTH * M_HEIGHT);
-	SDL_UpdateTexture(m_texture, nullptr, m_buffer, M_WIDTH * sizeof(Uint32));
-	SDL_RenderClear(m_renderer);
-	SDL_RenderCopy(m_renderer, m_texture, nullptr, nullptr);
-	SDL_RenderPresent(m_renderer);
-
     SDL_SetWindowBordered(m_window, SDL_TRUE);
     return true;
 }
 
-bool Window::close()
+void Window::close()
 {
-    delete[] m_buffer;
-    SDL_DestroyTexture(m_texture);
-    SDL_DestroyRenderer(m_renderer);
-    SDL_DestroyWindow(m_window);
+    if (isClosed()) {
+        return;
+    }
+        std::cout << "Window closed" << std::endl;
 
-    m_buffer = nullptr;
-    m_texture = nullptr;
-    m_renderer = nullptr;
-    m_window = nullptr;
+        delete[] m_buffer;
+        SDL_DestroyTexture(m_texture);
+        SDL_DestroyRenderer(m_renderer);
+        SDL_DestroyWindow(m_window);
 
-    return true;
+        m_buffer = nullptr;
+        m_texture = nullptr;
+        m_renderer = nullptr;
+        m_window = nullptr;
+
 }
 
 void Window::render()
 {
-    SDL_UpdateTexture(m_texture, nullptr, m_buffer, M_WIDTH * sizeof(uint32_t));
+    if (isClosed())
+    {
+        return;
+    }
+    SDL_UpdateTexture(m_texture, nullptr, m_buffer, M_WIDTH * sizeof(Uint32));
     SDL_RenderClear(m_renderer);
     SDL_RenderCopy(m_renderer, m_texture, nullptr, nullptr);
     SDL_RenderPresent(m_renderer);
 }
 
-void Window::setColor(uint8_t t_red, uint8_t t_green, uint8_t t_blue)
+void Window::setColor(Uint8 t_red, Uint8 t_green, Uint8 t_blue)
 {
     m_color = t_red;
     m_color <<= 8;
@@ -77,15 +80,28 @@ void Window::setColor(uint8_t t_red, uint8_t t_green, uint8_t t_blue)
     m_color <<= 8;
     m_color += t_blue;
     m_color <<= 8;
+    m_color += 0xff;
+}
+
+void Window::setColor(Uint32 t_color)
+{
+    m_color = t_color;
 }
 
 void Window::drawPixel(Coordinates t_coordinates)
 {
+    if(isClosed()){
+        return;
+    }
     m_buffer[t_coordinates.y * M_WIDTH + t_coordinates.x] = m_color;
 }
 
 void Window::drawRectangle(Coordinates t_topLeft, Coordinates t_bottomRight)
 {
+    if(isClosed()) {
+        return;
+    }
+
     int xStart = 0;
     int xEnd = 0;
     if (t_topLeft.x - t_bottomRight.x < 0)
@@ -121,6 +137,45 @@ void Window::drawRectangle(Coordinates t_topLeft, Coordinates t_bottomRight)
     }
 }
 
+void Window::drawLine(Coordinates t_start, Coordinates t_end)
+{
+    if(isClosed()) {
+        return;
+    }
+
+    int totalSteps = abs(t_start.x - t_end.x) > abs(t_start.y - t_end.y) ? abs(t_start.x - t_end.x) : abs(t_start.y - t_end.y);
+
+    float xStart = static_cast<float>(t_start.x);
+    float yStart = static_cast<float>(t_start.y);
+
+    float deltaXPerStep = static_cast<float>(t_end.x - t_start.x) / totalSteps;
+    float deltaYPerStep = static_cast<float>(t_end.y - t_start.y) / totalSteps;
+
+    for (int i = 0; i < totalSteps; ++i)
+    {
+        int drawX = static_cast<int>(xStart);
+        int drawY = static_cast<int>(yStart);
+        drawPixel({drawX, drawY});
+        xStart += deltaXPerStep;
+        yStart += deltaYPerStep;
+    }
+}
+
+void Window::drawBackground()
+{
+    if(isClosed()) {
+        return;
+    }
+
+    for (int col = 0; col < M_WIDTH; ++col)
+    {
+        for (int row = 0; row < M_HEIGHT; ++row)
+        {
+            drawPixel({col, row});
+        }
+    }
+}
+
 bool Window::isActive() const
 {
     if ((SDL_GetWindowFlags(m_window) & SDL_WINDOW_MOUSE_FOCUS) && (SDL_GetWindowFlags(m_window) & SDL_WINDOW_INPUT_FOCUS))
@@ -130,9 +185,14 @@ bool Window::isActive() const
     return false;
 }
 
-Uint32 Window::getWindowID() const{
-    return SDL_GetWindowID(m_window);
+bool Window::isClosed() const
+{
+    return m_window == nullptr;
 }
 
+Uint32 Window::getWindowID() const
+{
+    return SDL_GetWindowID(m_window);
+}
 
 } // namespace paint

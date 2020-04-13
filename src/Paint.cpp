@@ -1,56 +1,65 @@
 //Pixel Art application
 /*
-FEATURES Deadline: April 5 by midnight
-**********
-8 canvas tabs
-    -click to add new tabs (like in a web browser)
-    -play/stop button will scroll through the tabs to animate
-8 quick colors
-    -eight different quick select colors
-    -click customize to open subscreen to customize the eight colors
-    -choose from a color from color gradient or input hex/rgb (no alpha)
-4 quick brushes
-    -four quick select brushes
-    -click customize to open subscreen to customize four brushes
-    -customize shape (square, circle, diamond) and size (horizontal and vertical scale)
-4 special brush options from main menu 
-    -regular brush
-    -erase brush
-    -color picker
-    -fill all similar colors
-
-SCreen size 800 x 600
-submenu size 400 x 300 (1/4 the size)
-Canvas size:  ~512 x 512  //scale is 32x32
-Menu Bar size: ~300 x 600
-default background (blue checkered similar to Cobalt blue)
-Default frame color (darker blue similar to Cobalt blue theme)
-Highlights: yellow, orange, red, purple, green (Cobalt theme)
-    - mouse hover over pixel will highlight with yellow
-    - other highlights
-
-TO DO: CLOSING WINDOWS IS NOT WORKING CORRECTLY.  USER INPUT SHOULD RETURN CLOSE WINDOW (OR WINDOW ID//)
-
+Rewrite Grid class function getLowestValueCoordinate()
+Create grid with a std::pair<GridObject, int>
 */
 
 #include <iostream>
 #include <memory>
+#include <array>
 #define SDL_MAIN_HANDLED //there is a main in SDL_main.h that causes Linker entry point error without this #define
 #include "SDL.h"
 #include "Coordinates.hpp"
 #include "Screen.hpp"
 #include "UserInput.hpp"
+#include "Button.hpp"
+#include "Grid.hpp"
+#include "Vertex.hpp"
 
 using namespace paint;
 
-int main(int argc, char *argv[])
+
+
+
+
+int main()
 //int main()
 {
-    std::cout << "Does this work?" << std::endl;
-    Screen::initialize();
-    Window mainWindow("Paint", 800, 600); //Why do i get segumenation fault when not using pointer????
-    Window colorWindow("Color", 300, 200);
+    if (Screen::initialize())
+    {
+        std::cout << "SDL initialized" << std::endl;
+    }
 
+
+    Grid grid(32, 24);
+    for(int col = 0; col < 32; ++col) {
+        for(int row = 0; row < 24; ++row) {
+            grid.setVertexType(col, row, VertexType::Visited);
+        }
+    }
+    grid.setVertexType(0, 0, VertexType::Wall);
+    grid.setVertexType(31, 0, VertexType::Wall);
+    grid.setVertexType(0, 23, VertexType::Wall);
+    grid.setVertexType(31, 23, VertexType::Wall);
+    grid.setVertexType(12,10, VertexType::Start);
+    grid.setVertexType(20, 5, VertexType::End);
+    grid.setVertexDistance(12,11, 4);
+    grid.setVertexDistance(10, 10, 3);
+//    grid.setVertexType(10, 10, VertexType::Unvisited);
+
+    //windows
+    Window mainWindow("Paint", 800, 600);
+    mainWindow.drawBackground();
+    mainWindow.setColor(200, 200, 255);
+    mainWindow.drawBackground();
+    Window colorWindow("Color", 300, 200);
+    colorWindow.setColor(200, 255, 200);
+    colorWindow.drawBackground();
+
+    //buttons
+    Button button(&mainWindow, {0, 0}, 200, 200);
+    Button button3(&mainWindow, {500, 500}, 100, 100);
+    Button button2(&colorWindow, {0, 0}, 100, 100);
     UserInput userinput;
     bool appOpen = true;
     while (appOpen)
@@ -60,22 +69,27 @@ int main(int argc, char *argv[])
         {
             switch (input)
             {
-            case Inputs::MouseLeft: {
+            case Inputs::MouseLeft:
+            {
                 break;
             }
-            case Inputs::MouseRight: {
+            case Inputs::MouseRight:
+            {
                 break;
             }
-            case Inputs::CloseColorWindow: {
+            case Inputs::CloseColorWindow:
+            {
                 colorWindow.close();
                 break;
             }
-            case Inputs::CloseMainWindow: {
+            case Inputs::CloseMainWindow:
+            {
                 mainWindow.close();
                 appOpen = false;
                 break;
             }
-            case Inputs::CloseApplication: {
+            case Inputs::CloseApplication:
+            {
                 appOpen = false;
                 break;
             }
@@ -83,6 +97,99 @@ int main(int argc, char *argv[])
                 break;
             }
         }
+
+        //get currently active window
+        Window *activeWindow = nullptr;
+        if (mainWindow.isActive())
+        {
+            activeWindow = &mainWindow;
+        }
+        else if (colorWindow.isActive())
+        {
+            activeWindow = &colorWindow;
+        }
+
+        //update button states
+        if (button.mouseHover(activeWindow, userinput.getMouseCoordinates()))
+        {
+            button.setState(State::Hover);
+        }
+        else
+        {
+            button.setState(State::Idle);
+        }
+        if (button3.mouseHover(activeWindow, userinput.getMouseCoordinates()))
+        {
+            button3.setState(State::Hover);
+        }
+        else
+        {
+            button3.setState(State::Idle);
+        }
+
+        //update button states
+        if (button2.mouseHover(activeWindow, userinput.getMouseCoordinates()))
+        {
+            button2.setState(State::Hover);
+        }
+        else
+        {
+            button2.setState(State::Idle);
+        }
+
+        button.update();
+        button2.update();
+        button3.update();
+
+        //draw grid
+        for(int col = 0; col < 32; ++col) {
+            for (int row = 0; row < 24; ++row)
+            {
+                Vertex v = grid.getVertex(col, row);
+                switch (v.type)
+                {
+                case VertexType::Wall:
+                    mainWindow.setColor(0, 0, 0);
+                    break;
+                case VertexType::Unvisited:
+                    mainWindow.setColor(255, 255, 255);
+                    break;
+                case VertexType::Visited:
+                    mainWindow.setColor(255,255,255);
+                    break;
+                case VertexType::Start:
+                    mainWindow.setColor(150,150,255);
+                    break;
+                case VertexType::End:
+                    mainWindow.setColor(150, 255, 150);
+                    break;
+                default:
+                    mainWindow.setColor(255, 255, 255);
+                    break;
+                }
+                //change to grey if lowest value
+                Vertex* next = grid.getNextVertex();
+                if(next != nullptr) {
+                    if(next->coordinates.x == col && next->coordinates.y == row)
+                        mainWindow.setColor(150,150,150);
+                }
+                
+                mainWindow.drawRectangle({col * 25, row * 25}, {col * 25 + 25, row * 25 + 25});
+            }
+        }
+
+        mainWindow.setColor(150, 150, 150);
+        //draw grid lines
+        for (int col = 25; col < 800; col += 25)
+        {
+            mainWindow.drawLine({col, 0}, {col, 600});
+        }
+        for (int row = 25; row < 600; row += 25)
+        {
+            mainWindow.drawLine({0, row}, {800, row});
+        }
+        mainWindow.render();
+        colorWindow.render();
     }
 
     colorWindow.close();

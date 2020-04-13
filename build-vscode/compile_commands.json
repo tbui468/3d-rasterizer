@@ -21,5 +21,17 @@
   "directory": "C:/dev/Paint/build-vscode",
   "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Window.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Window.cpp",
   "file": "C:/dev/Paint/src/Window.cpp"
+},
+
+{
+  "directory": "C:/dev/Paint/build-vscode",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Button.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Button.cpp",
+  "file": "C:/dev/Paint/src/Button.cpp"
+},
+
+{
+  "directory": "C:/dev/Paint/build-vscode",
+  "command": "C:\\PROGRA~2\\MICROS~2\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx86\\x86\\cl.exe  /nologo /TP  -I..\\dependencies\\SDL2\\include  /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17 /Fosrc\\CMakeFiles\\Paint.dir\\Grid.cpp.obj /FdTARGET_COMPILE_PDB /FS -c C:\\dev\\Paint\\src\\Grid.cpp",
+  "file": "C:/dev/Paint/src/Grid.cpp"
 }
 ]

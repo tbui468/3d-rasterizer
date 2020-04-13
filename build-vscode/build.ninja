@@ -98,6 +98,22 @@ build src\CMakeFiles\Paint.dir\Window.cpp.obj: CXX_COMPILER__Paint ..\src\Window
   TARGET_COMPILE_PDB = src\CMakeFiles\Paint.dir\
   TARGET_PDB = src\Paint.pdb
 
+build src\CMakeFiles\Paint.dir\Button.cpp.obj: CXX_COMPILER__Paint ..\src\Button.cpp || cmake_object_order_depends_target_Paint
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  INCLUDES = -I..\dependencies\SDL2\include
+  OBJECT_DIR = src\CMakeFiles\Paint.dir
+  OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
+  TARGET_COMPILE_PDB = src\CMakeFiles\Paint.dir\
+  TARGET_PDB = src\Paint.pdb
+
+build src\CMakeFiles\Paint.dir\Grid.cpp.obj: CXX_COMPILER__Paint ..\src\Grid.cpp || cmake_object_order_depends_target_Paint
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  INCLUDES = -I..\dependencies\SDL2\include
+  OBJECT_DIR = src\CMakeFiles\Paint.dir
+  OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
+  TARGET_COMPILE_PDB = src\CMakeFiles\Paint.dir\
+  TARGET_PDB = src\Paint.pdb
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target Paint
@@ -106,7 +122,7 @@ build src\CMakeFiles\Paint.dir\Window.cpp.obj: CXX_COMPILER__Paint ..\src\Window
 #############################################
 # Link the executable src\Paint.exe
 
-build src\Paint.exe: CXX_EXECUTABLE_LINKER__Paint src\CMakeFiles\Paint.dir\Paint.cpp.obj src\CMakeFiles\Paint.dir\Screen.cpp.obj src\CMakeFiles\Paint.dir\UserInput.cpp.obj src\CMakeFiles\Paint.dir\Window.cpp.obj
+build src\Paint.exe: CXX_EXECUTABLE_LINKER__Paint src\CMakeFiles\Paint.dir\Paint.cpp.obj src\CMakeFiles\Paint.dir\Screen.cpp.obj src\CMakeFiles\Paint.dir\UserInput.cpp.obj src\CMakeFiles\Paint.dir\Window.cpp.obj src\CMakeFiles\Paint.dir\Button.cpp.obj src\CMakeFiles\Paint.dir\Grid.cpp.obj
   FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
   LINK_FLAGS = /machine:X86 /debug /INCREMENTAL /subsystem:console
   LINK_LIBRARIES = SDL2.lib  SDL2.lib  SDL2main.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib

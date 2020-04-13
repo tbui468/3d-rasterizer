@@ -3,12 +3,16 @@ set(Headers
     Screen.hpp
     UserInput.hpp
     Coordinates.hpp
-    Window.hpp)
+    Window.hpp
+    Button.hpp
+    Grid.hpp)
 set(Sources
     Paint.cpp
     Screen.cpp
     UserInput.cpp
-    Window.cpp)
+    Window.cpp
+    Button.cpp
+    Grid.cpp)
 
 add_executable(
     Paint
