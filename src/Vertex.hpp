@@ -11,7 +11,8 @@ enum class VertexType {
     Visited,
     Wall,
     Start,
-    End
+    End,
+    Path //shortest path from start to finish
 };
 
 

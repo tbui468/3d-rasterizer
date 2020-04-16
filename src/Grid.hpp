@@ -13,8 +13,10 @@ class Grid
 public:
     Grid(int columns, int rows);
 public:
-    const Vertex& getVertex(int column, int row) const;
+    Vertex* getVertex(int column, int row);
     Vertex* getNextVertex();
+    Vertex* getEnd();
+    Vertex* getStart();
     void setVertexDistance(int column, int row, int newDistance);
     void setVertexType(int column, int row, VertexType newType);
     void setVertexListPointer(int column, int row, Vertex& nextVertex);

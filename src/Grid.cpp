@@ -17,8 +17,8 @@ Grid::Grid(int columns, int rows)
 }
 
 
-const Vertex& Grid::getVertex(int column, int row) const {
-    return grid.at(column).at(row);
+Vertex* Grid::getVertex(int column, int row) {
+    return &(grid.at(column).at(row));
 }
 
 //returns a nullptr if no valid next vertex is found
@@ -26,7 +26,7 @@ Vertex* Grid::getNextVertex() {
     Vertex* lowestVertex {nullptr};
     for(std::vector<Vertex>& vector : grid) {
         for(Vertex& vertex : vector) {
-            if(vertex.type == VertexType::Unvisited) {
+            if(vertex.type == VertexType::Unvisited || vertex.type == VertexType::End || vertex.type == VertexType::Start) {
                 if(lowestVertex == nullptr) {
                     lowestVertex = &vertex;
                 }else{
@@ -42,16 +42,51 @@ Vertex* Grid::getNextVertex() {
     return lowestVertex;
 }
 
+Vertex *Grid::getEnd()
+{
+    for (std::vector<Vertex> &vector : grid)
+    {
+        for (Vertex &vertex : vector)
+        {
+            if (vertex.type == VertexType::End)
+            {
+                return &vertex;
+            }
+        }
+    }
+    return nullptr;
+}
 
-void Grid::setVertexDistance(int column, int row, int newDistance) {
+Vertex *Grid::getStart()
+{
+    for (std::vector<Vertex> &vector : grid)
+    {
+        for (Vertex &vertex : vector)
+        {
+            if (vertex.type == VertexType::Start)
+            {
+                return &vertex;
+            }
+        }
+    }
+    return nullptr;
+}
+
+void Grid::setVertexDistance(int column, int row, int newDistance)
+{
     grid.at(column).at(row).minimumDistance = newDistance;
 }
 
-void Grid::setVertexType(int column, int row, VertexType newType) {
+void Grid::setVertexType(int column, int row, VertexType newType)
+{
     grid.at(column).at(row).type = newType;
+    if(newType == VertexType::Start) {
+        grid.at(column).at(row).minimumDistance = 0;
+    }
 }
 
-void Grid::setVertexListPointer(int column, int row, Vertex& nextVertex) {
+void Grid::setVertexListPointer(int column, int row, Vertex &nextVertex)
+{
     grid.at(column).at(row).previousVertex = &nextVertex;
 }
 
