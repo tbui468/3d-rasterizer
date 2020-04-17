@@ -1,8 +1,4 @@
 //Pixel Art application
-/*
-Rewrite Grid class function getLowestValueCoordinate()
-Create grid with a std::pair<GridObject, int>
-*/
 
 #include <iostream>
 #include <memory>
@@ -18,26 +14,6 @@ Create grid with a std::pair<GridObject, int>
 
 using namespace paint;
 
-static void updateAdjacentVertex(Vertex* currentVertex, Vertex* adjVertex) {
-    if (adjVertex->type == VertexType::Unvisited || adjVertex->type == VertexType::End)
-    {
-        int oldAdjacentDis = adjVertex->minimumDistance;
-        int newAdjacentDis = currentVertex->minimumDistance + 1;
-        //if new distance is less than old dis, update distance, and set pointer
-        if (newAdjacentDis < oldAdjacentDis)
-        {
-            adjVertex->minimumDistance = newAdjacentDis;
-            adjVertex->previousVertex = currentVertex;
-        }
-    }
-}
-
-
-static bool insideGrid(int col, int row) {
-    bool insideHorizontal = (0 <= col && col < 32);
-    bool insideVertical = (0 <= row && row < 24);
-    return (insideHorizontal && insideVertical);
-}
 
 int main()
 //int main()
@@ -49,12 +25,6 @@ int main()
 
 
     Grid grid(32, 24);
-    for(int col = 0; col < 32; ++col) {
-        for(int row = 0; row < 24; ++row) {
-            grid.setVertexType(col, row, VertexType::Unvisited);
-            grid.setVertexDistance(col, row, 10000);
-        }
-    }
     grid.setVertexType(0, 0, VertexType::Wall);
     grid.setVertexType(31, 0, VertexType::Wall);
     grid.setVertexType(0, 23, VertexType::Wall);
@@ -86,47 +56,7 @@ int main()
         grid.setVertexType(24, i, VertexType::Wall);
     }
 
-
-
-    while(true) {
-        //get next vertex
-        Vertex* currentVertex = grid.getNextVertex();
-        if(currentVertex->type == VertexType::Unvisited || currentVertex->type == VertexType::Start) {
-            currentVertex->type = VertexType::Visited;
-        }
-        //exit loop if no Unvisited vertices remains or the next vertex is the end
-        if(currentVertex == nullptr || currentVertex->type == VertexType::End) {
-            break;
-        }
-
-        //calculate new values of adjacent vertices (check the four around it
-        int col = currentVertex->coordinates.x;
-        int row = currentVertex->coordinates.y;
-        //check above
-        if (insideGrid(col, row - 1))
-        {
-            Vertex *adjVertex = grid.getVertex(col, row - 1);
-            updateAdjacentVertex(currentVertex, adjVertex);
-        }
-        //check below
-        if (insideGrid(col, row + 1))
-        {
-            Vertex *adjVertex = grid.getVertex(col, row + 1);
-            updateAdjacentVertex(currentVertex, adjVertex);
-        }
-        //check left
-        if (insideGrid(col - 1, row))
-        {
-            Vertex *adjVertex = grid.getVertex(col - 1, row);
-            updateAdjacentVertex(currentVertex, adjVertex);
-        }
-        //check right
-        if (insideGrid(col + 1, row))
-        {
-            Vertex *adjVertex = grid.getVertex(col + 1, row);
-            updateAdjacentVertex(currentVertex, adjVertex);
-        }
-    }
+    grid.computePath();
 
 
     //windows
@@ -228,8 +158,8 @@ int main()
         {
             for (int row = 0; row < 24; ++row)
             {
-                Vertex *v = grid.getVertex(col, row);
-                switch (v->type)
+                VertexType type = grid.getVertexType(col, row);
+                switch (type)
                 {
                 case VertexType::Wall:
                     mainWindow.setColor(0, 0, 0);
@@ -252,31 +182,9 @@ int main()
                 }
 
                 mainWindow.drawRectangle({col * 25, row * 25}, {col * 25 + 25, row * 25 + 25});
-                Vertex* v2 = grid.getVertex(col, row);
-                mainWindow.setColor(255,0,0);
-                if(v2->previousVertex == nullptr) {
-                    mainWindow.drawPixel({col*25+12, row*25+12});
-                } 
             }
         }
 
-        //draw path from end to start
-        Vertex* end = grid.getEnd();
-        Vertex* current = end;
-        mainWindow.setColor(255, 0, 0);
-        while(current != nullptr) {
-            //cuolor current Vertex
-            if(current->type == VertexType::Visited){
-                int xC = current->coordinates.x;
-                int yC = current->coordinates.y;
-                if(current->previousVertex == nullptr) {
-                    mainWindow.setColor(100,100,255);
-                }
-                mainWindow.drawRectangle({xC*25, yC*25}, {xC*25+25, yC*25+25});
-            }
-            current = current->previousVertex;
-        }
-        
         
 
         mainWindow.setColor(150, 150, 150);

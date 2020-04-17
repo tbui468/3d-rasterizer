@@ -67,7 +67,7 @@ build rebuild_cache: phony CMakeFiles\rebuild_cache.util
 build cmake_object_order_depends_target_Paint: phony || src\CMakeFiles\Paint.dir
 
 build src\CMakeFiles\Paint.dir\Paint.cpp.obj: CXX_COMPILER__Paint ..\src\Paint.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /WX /permissive /w14640 /analyze -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -75,7 +75,7 @@ build src\CMakeFiles\Paint.dir\Paint.cpp.obj: CXX_COMPILER__Paint ..\src\Paint.c
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\Screen.cpp.obj: CXX_COMPILER__Paint ..\src\Screen.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /WX /permissive /w14640 /analyze -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -83,7 +83,7 @@ build src\CMakeFiles\Paint.dir\Screen.cpp.obj: CXX_COMPILER__Paint ..\src\Screen
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\UserInput.cpp.obj: CXX_COMPILER__Paint ..\src\UserInput.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /WX /permissive /w14640 /analyze -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -91,7 +91,7 @@ build src\CMakeFiles\Paint.dir\UserInput.cpp.obj: CXX_COMPILER__Paint ..\src\Use
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\Window.cpp.obj: CXX_COMPILER__Paint ..\src\Window.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /WX /permissive /w14640 /analyze -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -99,7 +99,7 @@ build src\CMakeFiles\Paint.dir\Window.cpp.obj: CXX_COMPILER__Paint ..\src\Window
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\Button.cpp.obj: CXX_COMPILER__Paint ..\src\Button.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /WX /permissive /w14640 /analyze -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir
@@ -107,7 +107,7 @@ build src\CMakeFiles\Paint.dir\Button.cpp.obj: CXX_COMPILER__Paint ..\src\Button
   TARGET_PDB = src\Paint.pdb
 
 build src\CMakeFiles\Paint.dir\Grid.cpp.obj: CXX_COMPILER__Paint ..\src\Grid.cpp || cmake_object_order_depends_target_Paint
-  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /permissive /w14640 -std:c++17
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   /W4 /WX /permissive /w14640 /analyze -std:c++17
   INCLUDES = -I..\dependencies\SDL2\include
   OBJECT_DIR = src\CMakeFiles\Paint.dir
   OBJECT_FILE_DIR = src\CMakeFiles\Paint.dir

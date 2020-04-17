@@ -71,11 +71,19 @@
 				},
 				{
 					"backtrace" : 4,
+					"fragment" : "/WX"
+				},
+				{
+					"backtrace" : 4,
 					"fragment" : "/permissive"
 				},
 				{
 					"backtrace" : 4,
 					"fragment" : "/w14640"
+				},
+				{
+					"backtrace" : 4,
+					"fragment" : "/analyze"
 				},
 				{
 					"fragment" : "-std:c++17"
