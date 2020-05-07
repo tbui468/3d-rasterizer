@@ -1,4 +1,4 @@
-# Install script for directory: C:/dev/Paint/src
+# Install script for directory: C:/dev/3dGraphics/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

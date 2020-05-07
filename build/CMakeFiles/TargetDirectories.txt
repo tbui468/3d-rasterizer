@@ -1,3 +1,0 @@
-C:/dev/Paint/build/CMakeFiles/ALL_BUILD.dir
-C:/dev/Paint/build/CMakeFiles/ZERO_CHECK.dir
-C:/dev/Paint/build/src/CMakeFiles/Paint.dir
