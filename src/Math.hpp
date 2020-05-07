@@ -138,6 +138,10 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         {
             return {this->x * other.x + this->y * other.y + this->z * other.z};
         }
+
+        float magnitude() const {
+            return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
+        }
     };
 
 
@@ -279,38 +283,50 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
                     this->firstCol.w * other.x + this->secondCol.w * other.y + this->thirdCol.w * other.z + this->fourthCol.w * other.w};
         }
 
-        //multiply with Mat3
-        Mat3 operator*(const Mat3 &other) const
+        //multiply with Mat4
+        Mat4 operator*(const Mat4 &other) const
         {
-            return {*this * other.leftCol, *this * other.midCol, *this * other.rightCol};
+            return {*this * other.firstCol, *this * other.secondCol, *this * other.thirdCol, *this * other.fourthCol};
         }
 
         //Matrix transforms
         //translate Mat3
-        static Mat3 translate(Vec2 translation) {
-            Mat3 m; //identity matrix
-            m.rightCol.x = translation.x;
-            m.rightCol.y = translation.y;
+        static Mat4 translate(Vec3 translation) {
+            Mat4 m; //identity matrix
+            m.fourthCol.x = translation.x;
+            m.fourthCol.y = translation.y;
+            m.fourthCol.z = translation.z;
             return m;
         }
         //scale Mat3 (scale all translations too)
-        static Mat3 scale(Vec2 scale) {
-            Mat3 m; //identity matrix
-            m.leftCol.x = scale.x;
-            m.midCol.y = scale.y;
+        static Mat4 scale(Vec3 scale) {
+            Mat4 m; //identity matrix
+            m.firstCol.x = scale.x;
+            m.secondCol.y = scale.y;
+            m.thirdCol.z = scale.z;
             return m;
         }
+
         //rotate Mat3 (rotate all translations too)
-        static Mat3 rotate(float angle) {
-            Mat3 m; //identity matrix
+        static Mat4 rotate(float angle, Vec3 ra ) {
+            Mat4 m; //identity matrix
+            ra = ra * (1.0f / ra.magnitude());
             //precalculate sine and cosine of angle
             float cosTheta = cos(angle);
             float sinTheta = sin(angle);
-            //
-            m.leftCol.x = cosTheta;
-            m.leftCol.y = sinTheta;
-            m.midCol.x = -sinTheta;
-            m.midCol.y = cosTheta;
+            //got this formula from wikipedia!!! (rotation matrix from axis and angle)
+            //column 1
+            m.firstCol.x = cosTheta + ra.x * ra.x * (1.0f - cosTheta);
+            m.firstCol.y = ra.y * ra.x * (1.0f - cosTheta) + ra.z * sinTheta;
+            m.firstCol.z = ra.z * ra.x * (1.0f - cosTheta) - ra.y * sinTheta;
+            //column 2
+            m.secondCol.x = ra.x * ra.y * (1.0f - cosTheta) - ra.z * sinTheta;
+            m.secondCol.y = cosTheta + ra.y * ra.y * (1.0f - cosTheta);
+            m.secondCol.z = ra.z * ra.y * (1.0f - cosTheta) + ra.x * sinTheta;
+            //column 3
+            m.thirdCol.x = ra.x * ra.z * (1.0f - cosTheta) + ra.y * sinTheta;
+            m.thirdCol.y = ra.y * ra.z * (1.0f - cosTheta) - ra.x * sinTheta;
+            m.thirdCol.z = cosTheta + ra.z * ra.z * (1.0f - cosTheta);
             return m;
         }
     };
