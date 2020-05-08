@@ -50,6 +50,7 @@ public:
     void putPixel(int x, int y);
     void drawLine(float x0, float y0, float x1, float y1);
     void drawPolygon(const std::vector<Vec2>& transformedBuffer, const std::vector<Index>& indexBuffer);
+    void drawPolygon(const std::vector<Vec3>& vertexBuffer, const Mat4& transformation, const std::vector<Index>& indexBuffer);
     void render();
     void clear();
     void processEvents(); //retrieves user input and fills m_inputs

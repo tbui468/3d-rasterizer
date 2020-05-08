@@ -26,6 +26,39 @@ int main()
     Camera camera(ct);
 
 
+//create test entity
+    Vertex vertex;
+    float s = 50.0f;
+    vertex.vertexArray.emplace_back(-s, -s, -s);
+    vertex.vertexArray.emplace_back(s, -s, -s);
+    vertex.vertexArray.emplace_back(s, s, -s);
+    vertex.vertexArray.emplace_back(-s, s, -s);
+    vertex.vertexArray.emplace_back(-s, -s, s);
+    vertex.vertexArray.emplace_back(s, -s, s);
+    vertex.vertexArray.emplace_back(s, s, s);
+    vertex.vertexArray.emplace_back(-s, s, s);
+    vertex.indexArray.emplace_back(0, 1, 2);
+    vertex.indexArray.emplace_back(0, 2, 3);
+    vertex.indexArray.emplace_back(0, 4, 7);
+    vertex.indexArray.emplace_back(0, 3, 7);
+    vertex.indexArray.emplace_back(0, 4, 5);
+    vertex.indexArray.emplace_back(0, 1, 5);
+
+    vertex.indexArray.emplace_back(6, 5, 1);
+    vertex.indexArray.emplace_back(6, 2, 1);
+    vertex.indexArray.emplace_back(6, 3, 2);
+    vertex.indexArray.emplace_back(6, 3, 7);
+    vertex.indexArray.emplace_back(6, 4, 5);
+    vertex.indexArray.emplace_back(6, 4, 7);
+
+    Entity e(vertex);
+
+    Entity e2(vertex);
+
+    e2.moveBy({100.0f, 100.0f, 0.0f});
+
+
+    e.moveBy({0.0f, 0.0f, 100.0f});
 
     bool play = true;
     while (play)
@@ -43,52 +76,61 @@ int main()
                 play = false;
                 break;
             case Input::Forward:
+                e.moveBy({0.0f, 2.1f, 0.0f});
                 break;
             case Input::Backward:
+                e.moveBy({0.0f, -2.1f, 0.0f});
                 break;
             case Input::StrafeLeft:
+                e.moveBy({-2.1f, 0.0f, 0.0f});
                 break;
             case Input::StrafeRight:
+                e.moveBy({2.1f, 0.0f, 0.0f});
                 break;
             case Input::PeekLeft:
+                e.rotateBy(0.1f);
+                e2.rotateBy(0.1f);
                 break;
             case Input::PeekRight:
+                e.rotateBy(-0.1f);
+                e2.rotateBy(-0.1f);
                 break;
             case Input::ZoomIn:
+                e.scaleBy({0.1f, 0.1f, 0.1f});
                 break;
             case Input::ZoomOut:
+                e.scaleBy({-0.1f, -0.1f, -0.1f});
                 break;
             case Input::CameraUp:
-                camera.moveBy({0.0f, 2.0f});
+                camera.moveBy({0.0f, 2.0f, 0.0f});
                 break;
             case Input::CameraDown:
-                camera.moveBy({0.0f, -2.0f});
+                camera.moveBy({0.0f, -2.0f, 0.0f});
                 break;
             case Input::CameraLeft:
-                camera.moveBy({-2.0f, 0.0f});
+                camera.moveBy({-2.0f, 0.0f, 0.0f});
                 break;
             case Input::CameraRight:
-                camera.moveBy({2.0f, 0.0f});
+                camera.moveBy({2.0f, 0.0f, 0.0f});
                 break;
-            case Input::CameraZoomIn:
-                camera.scaleBy(0.01f);
+            case Input::CameraZoomIn: 
                 break;
             case Input::CameraZoomOut:
-                camera.scaleBy(-0.01f);
                 break;
             case Input::CameraRotateCW:
-                camera.rotateBy(.01f);
                 break;
             case Input::CameraRotateCCW:
-                camera.rotateBy(-.01f);
                 break;
             }
         }
 
         screen.setColor(255, 255, 255);
 
+        camera.draw(e.getDrawable());
+        camera.draw(e2.getDrawable());
 
-/*
+
+        /*
         camera.draw(paddle.getDrawable());
         camera.draw(paddle2.getDrawable());
         camera.draw(paddle3.getDrawable());

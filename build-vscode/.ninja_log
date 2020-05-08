@@ -1,6 +1,22 @@
 # ninja log v5
-19	2690	610548398	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
-3	2956	610548398	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
-2957	4624	610548399	src/Paint.exe	c1bfaa4d59b18297
-21	2215	610551530	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
-19	2290	610551700	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
+3	2696	610612791	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
+32	2573	610612670	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
+2697	3353	610612791	src/Paint.exe	c1bfaa4d59b18297
+3	3079	610612967	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
+3080	4091	610612968	src/Paint.exe	c1bfaa4d59b18297
+21	2797	610613416	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
+4	2818	610613416	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
+2819	3522	610613416	src/Paint.exe	c1bfaa4d59b18297
+3	2388	610613523	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
+2389	2988	610613523	src/Paint.exe	c1bfaa4d59b18297
+3	2621	610613575	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
+2622	3347	610613575	src/Paint.exe	c1bfaa4d59b18297
+3	2917	610613731	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
+2918	3630	610613731	src/Paint.exe	c1bfaa4d59b18297
+4	2840	610613760	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
+2841	3527	610613761	src/Paint.exe	c1bfaa4d59b18297
+22	2632	610614285	src/CMakeFiles/Paint.dir/Screen.cpp.obj	c6266fe0911f87c0
+3	2665	610614285	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
+2666	3339	610614286	src/Paint.exe	c1bfaa4d59b18297
+3	2605	610614439	src/CMakeFiles/Paint.dir/Paint.cpp.obj	b518f15b215150a5
+2606	3351	610614440	src/Paint.exe	c1bfaa4d59b18297

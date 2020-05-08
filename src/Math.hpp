@@ -2,6 +2,7 @@
 #define MATH_H
 
 #include <iostream>
+#include <assert.h>
 
 namespace paint
 {
@@ -114,6 +115,10 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         float x;
         float y;
         float z;
+
+
+        Vec3() : x(0.0f), y(0.0f), z(0.0f) {};
+        Vec3(float x, float y, float z) : x(x), y(y), z(z) {};
 
         //add another Vec3
         Vec3 operator+(const Vec3 &other) const
@@ -309,11 +314,15 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
 
         //rotate Mat3 (rotate all translations too)
         static Mat4 rotate(float angle, Vec3 ra ) {
+            Vec3 rotationAxis = ra;
+            assert(abs(rotationAxis.magnitude()) > 0.00001f); //user must specify non-zero axis of rotation
+
             Mat4 m; //identity matrix
-            ra = ra * (1.0f / ra.magnitude());
-            //precalculate sine and cosine of angle
+
             float cosTheta = cos(angle);
             float sinTheta = sin(angle);
+
+            ra = ra * (1.0f / ra.magnitude());
             //got this formula from wikipedia!!! (rotation matrix from axis and angle)
             //column 1
             m.firstCol.x = cosTheta + ra.x * ra.x * (1.0f - cosTheta);
@@ -327,8 +336,16 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
             m.thirdCol.x = ra.x * ra.z * (1.0f - cosTheta) + ra.y * sinTheta;
             m.thirdCol.y = ra.y * ra.z * (1.0f - cosTheta) - ra.x * sinTheta;
             m.thirdCol.z = cosTheta + ra.z * ra.z * (1.0f - cosTheta);
+
             return m;
         }
+
+        static Mat4 perspective() {
+            Mat4 m;
+
+            return m;
+        }
+
     };
 
 

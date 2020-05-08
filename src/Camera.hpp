@@ -13,12 +13,14 @@ private:
     Vec3 m_translation;
     Vec3 m_scale;
     float m_angle;
+    Vec3 m_rotationAxis;
 public:
-    Camera(CoordinateTransformer ct) : m_CT(ct), m_translation({0.0f, 0.0f}), m_scale({1.0f, 1.0f}), m_angle(0.0f) {};
+    Camera(CoordinateTransformer ct) : m_CT(ct), m_translation({0.0f, 0.0f, 0.0f}), m_scale({1.0f, 1.0f, 1.0f}),
+                                       m_angle(0.0f), m_rotationAxis({1.0f, 0.0f, 0.0f}) {};
 
     //view transforms
     void draw(Drawable&& drawable) {
-        drawable.applyTransformation(Mat3::rotate(-m_angle) * Mat3::scale(m_scale) * Mat3::translate(m_translation * (-1)));
+        drawable.applyTransformation(Mat4::rotate(-m_angle, m_rotationAxis) * Mat4::scale(m_scale) * Mat4::translate(m_translation * (-1)));
         m_CT.draw(drawable); //passes to coordinate transform
     }
 
@@ -45,7 +47,7 @@ public:
         m_translation.y += distance.y * cosTheta + sinTheta * distance.x;
     }
 
-    void rotateBy(float angle) {
+    void rotateBy(float angle, Vec3 axis) {
         m_angle += angle;
     }
 };

@@ -111,14 +111,25 @@ void Screen::drawLine(float x0f, float y0f, float x1f, float y1f)
 
 }
 
-//draw model 
-void Screen::drawPolygon(const std::vector<Vec2>& transformedModel, const std::vector<Index>& indexBuffer) {
-    //looop through index buffer and draw each triangle
-    size_t vertexBufferSize = transformedModel.size();
+//draw model(THis can be processed by GPU for better performance, such as using CUDA)
+void Screen::drawPolygon(const std::vector<Vec3>& vertexBuffer, const Mat4& transformation, const std::vector<Index>& indexBuffer) {
+    //apply transformation to model and load into new vertex
+    unsigned int vertexBufferSize = vertexBuffer.size();
+    std::vector<Vec3> transformedVB;
+    for(const Vec3& v3 : vertexBuffer) {
+        Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
+        v4 = transformation * v4;
+        transformedVB.emplace_back(v4.x, v4.y, v4.z);
+    }
+
+    //draw each transformed vertex using index buffer
     for(const Index& i : indexBuffer) {
         assert(i.x < vertexBufferSize);
         assert(i.y < vertexBufferSize);
-        drawLine(transformedModel.at(i.x).x, transformedModel.at(i.x).y, transformedModel.at(i.y).x, transformedModel.at(i.y).y);
+        assert(i.z < vertexBufferSize);
+        drawLine(transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.y).x, transformedVB.at(i.y).y);
+        drawLine(transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.z).x, transformedVB.at(i.z).y);
+        drawLine(transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.x).x, transformedVB.at(i.x).y);
     }
 }
 
