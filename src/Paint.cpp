@@ -28,7 +28,7 @@ int main()
 
 //create test entity
     Vertex vertex;
-    float s = 50.0f;
+    float s = 0.5f;
     vertex.vertexArray.emplace_back(-s, -s, -s);
     vertex.vertexArray.emplace_back(s, -s, -s);
     vertex.vertexArray.emplace_back(s, s, -s);
@@ -53,12 +53,6 @@ int main()
 
     Entity e(vertex);
 
-    Entity e2(vertex);
-
-    e2.moveBy({100.0f, 100.0f, 0.0f});
-
-
-    e.moveBy({0.0f, 0.0f, 100.0f});
 
     bool play = true;
     while (play)
@@ -76,24 +70,22 @@ int main()
                 play = false;
                 break;
             case Input::Forward:
-                e.moveBy({0.0f, 2.1f, 0.0f});
+                e.moveBy({0.0f, .01f, 0.0f});
                 break;
             case Input::Backward:
-                e.moveBy({0.0f, -2.1f, 0.0f});
+                e.moveBy({0.0f, -.01f, 0.0f});
                 break;
             case Input::StrafeLeft:
-                e.moveBy({-2.1f, 0.0f, 0.0f});
+                e.moveBy({-.01f, 0.0f, 0.0f});
                 break;
             case Input::StrafeRight:
-                e.moveBy({2.1f, 0.0f, 0.0f});
+                e.moveBy({.01f, 0.0f, 0.0f});
                 break;
             case Input::PeekLeft:
-                e.rotateBy(0.1f);
-                e2.rotateBy(0.1f);
+                e.rotateBy(0.05f);
                 break;
             case Input::PeekRight:
-                e.rotateBy(-0.1f);
-                e2.rotateBy(-0.1f);
+                e.rotateBy(-0.05f);
                 break;
             case Input::ZoomIn:
                 e.scaleBy({0.1f, 0.1f, 0.1f});
@@ -102,16 +94,16 @@ int main()
                 e.scaleBy({-0.1f, -0.1f, -0.1f});
                 break;
             case Input::CameraUp:
-                camera.moveBy({0.0f, 2.0f, 0.0f});
+                camera.moveBy({0.0f, 0.01f, 0.0f});
                 break;
             case Input::CameraDown:
-                camera.moveBy({0.0f, -2.0f, 0.0f});
+                camera.moveBy({0.0f, -0.01f, 0.0f});
                 break;
             case Input::CameraLeft:
-                camera.moveBy({-2.0f, 0.0f, 0.0f});
+                camera.moveBy({-0.01f, 0.0f, 0.0f});
                 break;
             case Input::CameraRight:
-                camera.moveBy({2.0f, 0.0f, 0.0f});
+                camera.moveBy({0.01f, 0.0f, 0.0f});
                 break;
             case Input::CameraZoomIn: 
                 break;
@@ -127,7 +119,6 @@ int main()
         screen.setColor(255, 255, 255);
 
         camera.draw(e.getDrawable());
-        camera.draw(e2.getDrawable());
 
 
         /*

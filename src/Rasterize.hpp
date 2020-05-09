@@ -1,5 +1,59 @@
+#ifndef RASTERIZE_H
+#define RASTERIZE_H
+
+
+#include "Math.hpp"
+
+namespace paint {
+
+template <typename T>
+LinearCoefficients<typename T> getIntCoefficients(Vec2 start, Vec2 end) {
+    LinearCoefficients<T> lc;
+    lc.a = T(end.y) - T(start.y);
+    lc.b = T(start.x) - T(end.x);
+    lc.c = T(end.x) * T(start.y) - T(start.x) * T(end.y);
+
+    return lc;
+}
+
+
 void drawFlatTop(Screen &screen, Vec2 vertices[3])
 {
+    //get each line coefficients (integers)
+    LinearCoefficients<int>* lines[3]; //index: 0 - top line, 1 -left line, 2 - right line
+    lines[0] = &getIntCoefficients<int>(vertices[0], vertices[1]);
+    lines[1] = &getIntCoefficients<int>(vertices[1], vertices[2]);
+    lines[2] = &getIntCoefficients<int>(vertices[2], vertices[0]);
+
+    //assign top line to lines[0]
+    for(unsigned int i = 0; i < 3; ++i) {
+        if(lines[i]->a == 0) {
+            LinearCoefficients<int>* horizontalLine = lines[i];
+            lines[i] = lines[0];
+            lines[0] = horizontalLine;
+            break;
+        }
+    } 
+
+    //get y0 (y value of one of the two points that form flat top of triangle)
+    int y0 = int(lines[0]->c / lines[0]->b);
+    //get y1 (y value of the lowest point of the flattop triangle)
+    int y1 = y0;
+    for(unsigned int i = 0; i < 3; ++i) {
+        if(int(vertices[i].y) > y0) {
+            y1 = int(vertices[i].y);
+            break;
+        }
+    }
+
+    //iterate from y0 to y1;
+    for(int i = y0; i <= y1; ++i) {
+        int x0 = int((lines[1]->b * float(i) - lines[1]->c)/lines[1]->a);
+        int x1 = int((lines[2]->b * float(i) - lines[2]->c)/lines[2]->a);
+        screen.drawLine(x0, i, x1, i);
+    }
+/*
+
     //get left and right vertices
     Vec2* left = &vertices[0];
     Vec2* right = &vertices[1];
@@ -59,6 +113,7 @@ void drawFlatTop(Screen &screen, Vec2 vertices[3])
         }
         yCurrent += 1;
     }
+    */
 }
 
 void drawFlatBottom(Screen &screen, Vec2 vertices[3])
@@ -153,10 +208,9 @@ void drawTriangle(Screen& screen, Vec2 vertices[3]) {
     sorted[1] = *mid;
     sorted[2] = *bot;
 
-    //flattop triangle
-    if(top->y == mid->y) {
+    if(int(top->y) == int(mid->y)) { //flaptop triangle
         drawFlatTop(screen, sorted);
-    }else if(mid->y == bot->y) { //flatbottom triangle
+    }else if(int(mid->y) == int(bot->y)) { //flatbottom triangle
         drawFlatBottom(screen, sorted);
     }else{ //split triangle into two
         Vec2 topTri[3];
@@ -187,3 +241,8 @@ void drawTriangle(Screen& screen, Vec2 vertices[3]) {
         drawFlatBottom(screen, topTri);
     }
 }
+
+
+}
+
+#endif //RASTERIZE_H

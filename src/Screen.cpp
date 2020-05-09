@@ -1,4 +1,5 @@
 #include "Screen.hpp"
+#include "Rasterize.hpp"
 #include <memory>
 #include <assert.h>
 
@@ -80,56 +81,90 @@ void Screen::putPixel(int x, int y)
 
 void Screen::drawLine(float x0f, float y0f, float x1f, float y1f)
 {
-
     /*BRESEHAM'S ALGORITHM*/
     int x0 = int(x0f);
     int y0 = int(y0f);
     int x1 = int(x1f);
     int y1 = int(y1f);
 
-    int dx = abs(x1 - x0);
     int sx = x0 < x1 ? 1 : -1;
-    int dy = -abs(y1 - y0);
     int sy = y0 < y1 ? 1 : -1;
-    int err = dx + dy;
 
-    while(true) {
-        putPixel(x0, y0);
-        if(x0 == x1 && y0 == y1) {
-            break;
-        }
-        int e2 = 2 * err;
-        if(e2 > dy) {
-            err += dy;
+    if (y0 == y1)
+    { //horizontal line
+        while(true) {
+            putPixel(x0, y0);
+            if(x0 == x1)
+                break;
             x0 += sx;
         }
-        if(e2 <= dx) {
-            err += dx;
+    }
+    else if (x0 == x1)
+    { //vertical line
+        while(true) {
+            putPixel(x0, y0);
+            if(y0 == y1)
+                break;
             y0 += sy;
         }
     }
+    else
+    {
+        int dx = abs(x1 - x0);
+        int dy = -abs(y1 - y0);
+        int err = dx + dy;
 
+        while (true)
+        {
+            putPixel(x0, y0);
+            if (x0 == x1 && y0 == y1)
+            {
+                break;
+            }
+            int e2 = 2 * err;
+            if (e2 > dy)
+            {
+                err += dy;
+                x0 += sx;
+            }
+            if (e2 <= dx)
+            {
+                err += dx;
+                y0 += sy;
+            }
+        }
+    }
 }
 
 //draw model(THis can be processed by GPU for better performance, such as using CUDA)
-void Screen::drawPolygon(const std::vector<Vec3>& vertexBuffer, const Mat4& transformation, const std::vector<Index>& indexBuffer) {
+void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &transformation, const std::vector<Index> &indexBuffer)
+{
     //apply transformation to model and load into new vertex
     unsigned int vertexBufferSize = vertexBuffer.size();
     std::vector<Vec3> transformedVB;
-    for(const Vec3& v3 : vertexBuffer) {
+    for (const Vec3 &v3 : vertexBuffer)
+    {
         Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
         v4 = transformation * v4;
         transformedVB.emplace_back(v4.x, v4.y, v4.z);
     }
 
     //draw each transformed vertex using index buffer
-    for(const Index& i : indexBuffer) {
+    for (const Index &i : indexBuffer)
+    {
         assert(i.x < vertexBufferSize);
         assert(i.y < vertexBufferSize);
         assert(i.z < vertexBufferSize);
         drawLine(transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.y).x, transformedVB.at(i.y).y);
         drawLine(transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.z).x, transformedVB.at(i.z).y);
         drawLine(transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.x).x, transformedVB.at(i.x).y);
+
+        Vec2 vec[3];
+        vec[0] = {transformedVB.at(i.x).x, transformedVB.at(i.x).y};
+        vec[1] = {transformedVB.at(i.y).x, transformedVB.at(i.y).y};
+        vec[2] = {transformedVB.at(i.z).x, transformedVB.at(i.z).y};
+
+//        drawTriangle(*this, vec);
     }
 }
 
@@ -141,9 +176,12 @@ void Screen::render()
     SDL_RenderPresent(m_renderer);
 }
 
-void Screen::clear() {
-    for(int col = 0; col < SCREEN_WIDTH; ++col) {
-        for(int row = 0; row < SCREEN_HEIGHT; ++row) {
+void Screen::clear()
+{
+    for (int col = 0; col < SCREEN_WIDTH; ++col)
+    {
+        for (int row = 0; row < SCREEN_HEIGHT; ++row)
+        {
             putPixel(col, row);
         }
     }
@@ -152,47 +190,43 @@ void Screen::clear() {
 //fill m_inputs with events that occurred that frame
 void Screen::processEvents()
 {
-    const Uint8* state = SDL_GetKeyboardState(NULL);
-
-
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
 
     SDL_Event event;
     m_inputs.clear();
 
-
-    if(state[SDL_SCANCODE_W])
+    if (state[SDL_SCANCODE_W])
         m_inputs.push_back(Input::Forward);
-    if(state[SDL_SCANCODE_S])
+    if (state[SDL_SCANCODE_S])
         m_inputs.push_back(Input::Backward);
-    if(state[SDL_SCANCODE_E])
+    if (state[SDL_SCANCODE_E])
         m_inputs.push_back(Input::PeekRight);
-    if(state[SDL_SCANCODE_Q])
+    if (state[SDL_SCANCODE_Q])
         m_inputs.push_back(Input::PeekLeft);
-    if(state[SDL_SCANCODE_A])
+    if (state[SDL_SCANCODE_A])
         m_inputs.push_back(Input::StrafeLeft);
-    if(state[SDL_SCANCODE_D])
+    if (state[SDL_SCANCODE_D])
         m_inputs.push_back(Input::StrafeRight);
-    if(state[SDL_SCANCODE_Z])
+    if (state[SDL_SCANCODE_Z])
         m_inputs.push_back(Input::ZoomIn);
-    if(state[SDL_SCANCODE_X])
+    if (state[SDL_SCANCODE_X])
         m_inputs.push_back(Input::ZoomOut);
-    if(state[SDL_SCANCODE_UP])
+    if (state[SDL_SCANCODE_UP])
         m_inputs.push_back(Input::CameraUp);
-    if(state[SDL_SCANCODE_DOWN])
+    if (state[SDL_SCANCODE_DOWN])
         m_inputs.push_back(Input::CameraDown);
-    if(state[SDL_SCANCODE_LEFT])
+    if (state[SDL_SCANCODE_LEFT])
         m_inputs.push_back(Input::CameraLeft);
-    if(state[SDL_SCANCODE_RIGHT])
+    if (state[SDL_SCANCODE_RIGHT])
         m_inputs.push_back(Input::CameraRight);
-    if(state[SDL_SCANCODE_COMMA])
+    if (state[SDL_SCANCODE_COMMA])
         m_inputs.push_back(Input::CameraRotateCW);
-    if(state[SDL_SCANCODE_PERIOD])
+    if (state[SDL_SCANCODE_PERIOD])
         m_inputs.push_back(Input::CameraRotateCCW);
-    if(state[SDL_SCANCODE_SEMICOLON])
+    if (state[SDL_SCANCODE_SEMICOLON])
         m_inputs.push_back(Input::CameraZoomIn);
-    if(state[SDL_SCANCODE_APOSTROPHE])
+    if (state[SDL_SCANCODE_APOSTROPHE])
         m_inputs.push_back(Input::CameraZoomOut);
-
 
     while (SDL_PollEvent(&event))
     {
@@ -201,7 +235,7 @@ void Screen::processEvents()
             m_inputs.push_back(Input::Quit);
         }
         else if (event.type == SDL_KEYDOWN)
-        {/*
+        { /*
             int key = event.key.keysym.sym;
             if (key == SDLK_a)
                 m_inputs.push_back(Input::Left);
@@ -220,7 +254,8 @@ void Screen::processEvents()
 }
 
 //removes and returns next user input
-Input Screen::getNextEvent() {
+Input Screen::getNextEvent()
+{
     assert(hasEvents());
     Input ret = m_inputs.back();
     m_inputs.pop_back();

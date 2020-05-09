@@ -43,6 +43,7 @@ public:
     {
         screen.drawPolygon(*m_vertexBuffer, m_transformation, *m_indexBuffer);
     }
+
 };
 
 } // namespace paint
