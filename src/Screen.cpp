@@ -1,5 +1,4 @@
 #include "Screen.hpp"
-#include "Rasterize.hpp"
 #include <memory>
 #include <assert.h>
 
@@ -146,10 +145,11 @@ void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &tran
     {
         Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
         v4 = transformation * v4;
-        transformedVB.emplace_back(v4.x, v4.y, v4.z);
+        transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w); //perspective division
     }
 
     //draw each transformed vertex using index buffer
+    char color = 10;
     for (const Index &i : indexBuffer)
     {
         assert(i.x < vertexBufferSize);
@@ -163,9 +163,135 @@ void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &tran
         vec[0] = {transformedVB.at(i.x).x, transformedVB.at(i.x).y};
         vec[1] = {transformedVB.at(i.y).x, transformedVB.at(i.y).y};
         vec[2] = {transformedVB.at(i.z).x, transformedVB.at(i.z).y};
-
-//        drawTriangle(*this, vec);
+        color += 20;
+        //setColor(color, color, color);
+        //fillTriangle(vec[0], vec[1], vec[2]);
     }
+}
+
+
+
+void Screen::fillTriangle(const Vec2 &vec1, const Vec2 &vec2, const Vec2 &vec3)
+{
+    const Vec2 *top = &vec1;
+    const Vec2 *mid = &vec2;
+    const Vec2 *bot = &vec3;
+
+    //check to swap top and mid
+    if(top->y > mid->y) {
+        const Vec2* topHolder = top;
+        top = mid;
+        mid = topHolder;
+    }
+
+    //check to swap mid and bot
+    if(mid->y > bot->y) {
+        const Vec2* midHolder = mid;
+        mid = bot;
+        bot = midHolder;
+
+        //check if top and mid need to be swapped after mid/bottom swap
+        if(top->y > mid->y) {
+            const Vec2* topHolder = top;
+            top = mid;
+            mid = topHolder;
+        }
+    }
+
+    if(int(top->y) == int(mid->y)) { //flap top
+        fillFlatTopTriangle(*top, *mid, *bot);
+    }else if(int(mid->y) == int(bot->y)) { //flat bottom
+        fillFlatBottomTriangle(*top, *mid, *bot);
+    }else{ //split triangle into flat/bottom triangles
+        float a = top->y - bot->y;
+        float b = bot->x - top->x;
+        float c = top->x * bot->y - bot->x * top->y;
+        Vec2 newMid;
+        if(abs(a) > 0.01f) 
+            newMid = {(-b * mid->y - c) / a, mid->y};
+        else //vertical line (approx.) between top and bottom
+            newMid = {top->x, mid->y};
+        fillFlatBottomTriangle(*top, *mid, newMid);
+        fillFlatTopTriangle(*mid, newMid, *bot);
+    }
+
+}
+
+void Screen::fillFlatBottomTriangle(const Vec2& top, const Vec2& bot1, const Vec2& bot2) {
+    const Vec2* left = &bot1;
+    const Vec2* right = &bot2;
+    if(left->x > right->x) {
+        const Vec2* leftHolder = left;
+        left = right;
+        right = leftHolder;
+    }
+
+    float leftA = top.y - left->y;
+    float leftB = left->x - top.x;
+    float leftC = top.x * left->y - left->x * top.y;
+
+
+    float rightA = top.y - right->y;
+    float rightB = right->x - top.x;
+    float rightC = top.x * right->y - right->x * top.y;
+
+    float yStart = top.y;
+    float yEnd = bot1.y;
+
+    while(yStart < yEnd) {
+        float xStart;
+        if(abs(leftA) > 0.01f)
+            xStart = (-leftB * yStart - leftC) / leftA;
+        else //approx. vertical line between left side and top
+            xStart = top.x;
+
+        float xEnd;
+        if(abs(rightA) > 0.01f)
+            xEnd = (-rightB * yStart - rightC) / rightA;
+        else //approx. vertical line between right sid and top
+            xEnd = top.x;
+        drawLine(xStart, yStart, xEnd, yStart);
+        yStart += 1.0f;
+    }
+}
+
+
+void Screen::fillFlatTopTriangle(const Vec2& top1, const Vec2& top2, const Vec2& bot) {
+    const Vec2* left = &top1;
+    const Vec2* right = &top2;
+    if(left->x > right->x) {
+        const Vec2* leftHolder = left;
+        left = right;
+        right = leftHolder;
+    }
+
+    float leftA = bot.y - left->y;
+    float leftB = left->x - bot.x;
+    float leftC = bot.x * left->y - left->x * bot.y;
+
+
+    float rightA = bot.y - right->y;
+    float rightB = right->x - bot.x;
+    float rightC = bot.x * right->y - right->x * bot.y;
+
+    float yStart = top1.y;
+    float yEnd = bot.y;
+
+    while(yStart < yEnd) {
+        float xStart;
+        if(abs(leftA) > 0.01f)
+            xStart = (-leftB * yStart - leftC) / leftA;
+        else //approx. vertical between left side and bottom
+            xStart = bot.x;
+        float xEnd;
+        if(abs(rightA) > 0.01f)
+            xEnd = (-rightB * yStart - rightC) / rightA;
+        else //approx vertical between rightside and bottom
+            xEnd = bot.x;
+        drawLine(xStart, yStart, xEnd, yStart);
+        yStart += 1.0f;
+    }
+
 }
 
 void Screen::render()

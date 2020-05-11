@@ -21,8 +21,7 @@ public:
 
     //projection transform
     void draw(Drawable& drawable) {
-        //appply perspective transforms here?? (before coordinate transforms)
-        ////drawable.applyTransformation(Mat4::perspective());
+        drawable.applyTransformation(Mat4::perspective());
         drawable.applyTransformation(Mat4::scale(m_aspectRatio) * Mat4::translate(m_offset) * Mat4::scale(m_scale));
         drawable.render(*m_screen);
     }

@@ -348,21 +348,8 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
 
         static Mat4 perspective() {
             Mat4 m;
-            float fov = 3.14f / 2.0f;
-            float s = 1.0f / tan(fov / 2.0f);
-            m.firstCol.x = s;
-            m.secondCol.y = s;
 
-            float f = 100.0f;
-            float n = 0.1f;
-
-            float exp1 = -1.0f * f / (f-n);
-            float exp2 = exp1 * n;
-
-            m.thirdCol.z = exp1;
-            m.thirdCol.w = exp2;
-
-            m.fourthCol.z = -1.0f;
+            m.thirdCol.w = 1.0f;
             m.fourthCol.w = 0.0f;
 
             return m;

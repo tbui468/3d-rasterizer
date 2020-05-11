@@ -51,8 +51,14 @@ int main()
     vertex.indexArray.emplace_back(6, 4, 5);
     vertex.indexArray.emplace_back(6, 4, 7);
 
-    Entity e(vertex);
 
+    Entity e(vertex);
+    Entity e2(vertex);
+    Entity e3(vertex);
+
+    e.moveBy({0.0f, 0.0f, 2.0f});
+    e2.moveBy({0.6f, 0.6f, 2.0f});
+    e3.moveBy({-0.6f, -0.6f, 2.0f});
 
     bool play = true;
     while (play)
@@ -119,6 +125,8 @@ int main()
         screen.setColor(255, 255, 255);
 
         camera.draw(e.getDrawable());
+        camera.draw(e2.getDrawable());
+        camera.draw(e3.getDrawable());
 
 
         /*

@@ -9,6 +9,7 @@ namespace paint {
 struct Vertex {
     std::vector<Vec3> vertexArray;
     std::vector<Index> indexArray; 
+
 };
 
 }

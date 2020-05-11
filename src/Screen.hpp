@@ -49,14 +49,17 @@ public:
     void setColor(uint32_t color);
     void putPixel(int x, int y);
     void drawLine(float x0, float y0, float x1, float y1);
-    void drawPolygon(const std::vector<Vec2>& transformedBuffer, const std::vector<Index>& indexBuffer);
     void drawPolygon(const std::vector<Vec3>& vertexBuffer, const Mat4& transformation, const std::vector<Index>& indexBuffer);
+    void fillTriangle(const Vec2& vec1, const Vec2& vec2, const Vec2& vec3);
     void render();
     void clear();
     void processEvents(); //retrieves user input and fills m_inputs
     Input getNextEvent(); //get next event from m_inputs, removing it from vector
     inline bool hasEvents() const { return m_inputs.size() > 0;};
     void close();
+private:
+    void fillFlatTopTriangle(const Vec2& vec1, const Vec2& vec2, const Vec2& vec3);
+    void fillFlatBottomTriangle(const Vec2& vec1, const Vec2& vec2, const Vec2& vec3);
 };
 
 }
