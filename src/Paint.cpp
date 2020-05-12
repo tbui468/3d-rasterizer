@@ -43,7 +43,6 @@ int main()
     vertex.indexArray.emplace_back(0, 3, 7);
     vertex.indexArray.emplace_back(0, 4, 5);
     vertex.indexArray.emplace_back(0, 1, 5);
-
     vertex.indexArray.emplace_back(6, 5, 1);
     vertex.indexArray.emplace_back(6, 2, 1);
     vertex.indexArray.emplace_back(6, 3, 2);
@@ -56,9 +55,9 @@ int main()
     Entity e2(vertex);
     Entity e3(vertex);
 
-    e.moveBy({0.0f, 0.0f, 2.0f});
-    e2.moveBy({0.6f, 0.6f, 2.0f});
-    e3.moveBy({-0.6f, -0.6f, 2.0f});
+    e.moveBy({0.0f, 0.0f, 3.0f});
+    e2.moveBy({2.5f, 0.0f, 4.0f});
+    e3.moveBy({3.5f, 3.0f, 5.0f});
 
     bool play = true;
     while (play)
@@ -88,10 +87,10 @@ int main()
                 e.moveBy({.01f, 0.0f, 0.0f});
                 break;
             case Input::PeekLeft:
-                e.rotateBy(0.05f);
+                e.rotateBy(0.03f);
                 break;
             case Input::PeekRight:
-                e.rotateBy(-0.05f);
+                e.rotateBy(-0.03f);
                 break;
             case Input::ZoomIn:
                 e.scaleBy({0.1f, 0.1f, 0.1f});
@@ -112,12 +111,16 @@ int main()
                 camera.moveBy({0.01f, 0.0f, 0.0f});
                 break;
             case Input::CameraZoomIn: 
+                camera.moveBy({0.0f, 0.0f, 0.01f});
                 break;
             case Input::CameraZoomOut:
+                camera.moveBy({0.0f, 0.0f, -0.01f});
                 break;
             case Input::CameraRotateCW:
+                camera.rotateBy(0.008f);
                 break;
             case Input::CameraRotateCCW:
+                camera.rotateBy(-0.008f);
                 break;
             }
         }

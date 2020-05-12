@@ -16,7 +16,7 @@ private:
     Vec3 m_rotationAxis;
 public:
     Camera(CoordinateTransformer ct) : m_CT(ct), m_translation({0.0f, 0.0f, 0.0f}), m_scale({1.0f, 1.0f, 1.0f}),
-                                       m_angle(0.0f), m_rotationAxis({1.0f, 0.0f, 0.0f}) {};
+                                       m_angle(0.0f), m_rotationAxis({0.0f, 0.0f, 1.0f}) {};
 
     //view transforms
     void draw(Drawable&& drawable) {
@@ -45,9 +45,10 @@ public:
         float sinTheta = sin(m_angle);
         m_translation.x += distance.x * cosTheta -sinTheta * distance.y;
         m_translation.y += distance.y * cosTheta + sinTheta * distance.x;
+        m_translation.z += distance.z;
     }
 
-    void rotateBy(float angle, Vec3 axis) {
+    void rotateBy(float angle) {
         m_angle += angle;
     }
 };

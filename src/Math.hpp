@@ -321,7 +321,7 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         //rotate Mat3 (rotate all translations too)
         static Mat4 rotate(float angle, Vec3 ra ) {
             Vec3 rotationAxis = ra;
-            assert(abs(rotationAxis.magnitude()) > 0.00001f); //user must specify non-zero axis of rotation
+            assert(abs(rotationAxis.magnitude()) > 0.001f); //user must specify non-zero axis of rotation
 
             Mat4 m; //identity matrix
 
@@ -346,12 +346,38 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
             return m;
         }
 
+        //NDC x:[-1, 1], y:[-1, 1], z:[0,1]
         static Mat4 perspective() {
             Mat4 m;
+            float l = -1.0f;
+            float r = 1.0f;
+            float t = 1.0f;
+            float b = -1.0f;
+            float n = 1.0f; //near clipping plane
+            float f = 10.0f; //far clipping plane
+            
+            m.firstCol.x = (2 * n) / (r - l);
+            m.secondCol.y = (2 * n) / (t - b);
+
+            m.thirdCol.x = (-r - l) / (r - l);
+            m.thirdCol.y = (-t - b) / (t - b);
+            m.thirdCol.z = (f) / (f - n);
+            m.thirdCol.w = 1.0f;
+
+            m.fourthCol.z = (-f * n) / (f - n);
+            m.fourthCol.w = 0.0f;
+/*
+            m.firstCol.x = 1.0f;
+            m.secondCol.y = 1.0f;
 
             m.thirdCol.w = 1.0f;
-            m.fourthCol.w = 0.0f;
+            m.fourthCol.w = 0.0f;*/
 
+            return m;
+        }
+
+        static Mat4 orthogonal() {
+            Mat4 m;
             return m;
         }
 

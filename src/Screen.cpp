@@ -145,7 +145,10 @@ void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &tran
     {
         Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
         v4 = transformation * v4;
-        transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w); //perspective division
+        if(v4.w > 0.01f)
+            transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w); //perspective division
+        else
+            transformedVB.emplace_back(0.0f, 0.0f, 0.0f); //perspective division
     }
 
     //draw each transformed vertex using index buffer
@@ -158,14 +161,14 @@ void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &tran
         drawLine(transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.y).x, transformedVB.at(i.y).y);
         drawLine(transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.z).x, transformedVB.at(i.z).y);
         drawLine(transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.x).x, transformedVB.at(i.x).y);
-
+/*
         Vec2 vec[3];
         vec[0] = {transformedVB.at(i.x).x, transformedVB.at(i.x).y};
         vec[1] = {transformedVB.at(i.y).x, transformedVB.at(i.y).y};
         vec[2] = {transformedVB.at(i.z).x, transformedVB.at(i.z).y};
         color += 20;
-        //setColor(color, color, color);
-        //fillTriangle(vec[0], vec[1], vec[2]);
+        setColor(color, color, color);
+        fillTriangle(vec[0], vec[1], vec[2]);*/
     }
 }
 
