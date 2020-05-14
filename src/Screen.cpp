@@ -145,7 +145,7 @@ void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &tran
     {
         Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
         v4 = transformation * v4;
-        if(v4.w > 0.01f)
+        if(v4.w > 0.01f) //geometric clipping will take care of negative and 0 w'.  So this line won't be necessary
             transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w); //perspective division
         else
             transformedVB.emplace_back(0.0f, 0.0f, 0.0f); //perspective division

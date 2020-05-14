@@ -12,6 +12,7 @@ class Entity {
 private:
     const std::vector<Vec3> m_vertexBuffer;
     const std::vector<Index> m_indexBuffer;
+    std::vector<bool> m_cullFlags;
     Vec3 m_scale;
     float m_angle;
     Vec3 m_rotationAxis;
@@ -93,6 +94,12 @@ public:
 
     const std::vector<Index>& getIndexArray() const {
         return m_indexBuffer;
+    }
+
+private:
+
+    void resetCullFlags() {
+        m_cullFlags.clear();
     }
 
 };

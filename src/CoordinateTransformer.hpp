@@ -13,17 +13,22 @@ namespace paint {
 class CoordinateTransformer {
 private: 
     inline static Vec3 m_scale {300.0f, -300.0f, 300.0f};
-    inline static Vec3 m_offset {400.0f, 300.0f, 1.0f};
+    inline static Vec3 m_offset {400.0f, 300.0f, 0.0f};
     Screen* m_screen;
 public:
     CoordinateTransformer(Screen& screen) : m_screen(&screen) {};
 
-    //projection transform
     void draw(Drawable& drawable) {
+        //perform backface culling here!!!
+
         //perspective transformation
         drawable.applyTransformation(Mat4::perspective());
-        //drawable.applyTransformation(Mat4::orthogonal());
 
+        //how about backface culling here??????
+
+        //peform triangle clipping here
+
+        //viewport mapping
         drawable.applyTransformation(Mat4::translate(m_offset) * Mat4::scale(m_scale));
         drawable.render(*m_screen);
     }

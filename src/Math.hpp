@@ -61,6 +61,7 @@ namespace paint
         float magnitude() const {
             return sqrt(this->x * this->x + this->y * this->y);
         }
+
     };
 
     //print Vec2
@@ -152,6 +153,14 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
 
         float magnitude() const {
             return sqrt(this->x * this->x + this->y * this->y + this->z * this->z);
+        }
+
+        Vec3 crossProduct(Vec3 v) {
+            Vec3 ret;
+            ret.x = this->y * v.z - this->z * v.y;
+            ret.y = this->z * v.x - this->x * v.z;
+            ret.z = this->x * v.y - this->y * v.x;
+            return ret;
         }
     };
 
@@ -349,12 +358,12 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         //NDC x:[-1, 1], y:[-1, 1], z:[0,1]
         static Mat4 perspective() {
             Mat4 m;
-            float l = -1.0f;
-            float r = 1.0f;
-            float t = 1.0f;
-            float b = -1.0f;
-            float n = 1.0f; //near clipping plane
-            float f = 10.0f; //far clipping plane
+            float l = -100.0f;
+            float r = 100.0f;
+            float t = 100.0f;
+            float b = -100.0f;
+            float n = 200.0f; //near clipping plane
+            float f = 400.0f; //far clipping plane
             
             m.firstCol.x = (2 * n) / (r - l);
             m.secondCol.y = (2 * n) / (t - b);
@@ -366,12 +375,6 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
 
             m.fourthCol.z = (-f * n) / (f - n);
             m.fourthCol.w = 0.0f;
-/*
-            m.firstCol.x = 1.0f;
-            m.secondCol.y = 1.0f;
-
-            m.thirdCol.w = 1.0f;
-            m.fourthCol.w = 0.0f;*/
 
             return m;
         }
