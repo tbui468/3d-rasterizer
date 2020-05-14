@@ -358,12 +358,12 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         //NDC x:[-1, 1], y:[-1, 1], z:[0,1]
         static Mat4 perspective() {
             Mat4 m;
-            float l = -100.0f;
-            float r = 100.0f;
+            float l = -133.0f; //
+            float r = 133.0f;
             float t = 100.0f;
             float b = -100.0f;
             float n = 200.0f; //near clipping plane
-            float f = 400.0f; //far clipping plane
+            float f = 10000.0f; //far clipping plane
             
             m.firstCol.x = (2 * n) / (r - l);
             m.secondCol.y = (2 * n) / (t - b);

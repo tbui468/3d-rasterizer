@@ -136,12 +136,15 @@ void Screen::drawLine(float x0f, float y0f, float x1f, float y1f)
 }
 
 //draw model(THis can be processed by GPU for better performance, such as using CUDA)
-void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &transformation, const std::vector<Index> &indexBuffer)
+void Screen::drawPolygon(const Vertex &vertexBuffer, const Mat4 &transformation)
 {
+    assert(vertexBuffer.indices.size() == vertexBuffer.cullFlags.size());
+
+
     //apply transformation to model and load into new vertex
-    unsigned int vertexBufferSize = vertexBuffer.size();
+    unsigned int vertexBufferSize = vertexBuffer.positions.size();
     std::vector<Vec3> transformedVB;
-    for (const Vec3 &v3 : vertexBuffer)
+    for (const Vec3 &v3 : vertexBuffer.positions)
     {
         Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
         v4 = transformation * v4;
@@ -153,11 +156,20 @@ void Screen::drawPolygon(const std::vector<Vec3> &vertexBuffer, const Mat4 &tran
 
     //draw each transformed vertex using index buffer
     char color = 10;
-    for (const Index &i : indexBuffer)
+    for(unsigned int k = 0; k < vertexBuffer.indices.size(); ++k) 
     {
+        const Index& i = vertexBuffer.indices.at(k);
+        //if cullFlag is true, continue loop
+        if(vertexBuffer.cullFlags.at(k))
+            continue;
         assert(i.x < vertexBufferSize);
         assert(i.y < vertexBufferSize);
         assert(i.z < vertexBufferSize);
+        float scale = transformedVB.at(i.x).z; //should be between 0 and 1 if inside screen
+        scale *= scale;
+        scale = 1.0f - scale;
+        scale *= 255.0f;
+        setColor(int(scale), int(scale), int(scale));
         drawLine(transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.y).x, transformedVB.at(i.y).y);
         drawLine(transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.z).x, transformedVB.at(i.z).y);
         drawLine(transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.x).x, transformedVB.at(i.x).y);

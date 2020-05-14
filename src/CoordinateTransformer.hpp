@@ -12,25 +12,25 @@ namespace paint {
 //y axis: down is negative and up is positive
 class CoordinateTransformer {
 private: 
-    inline static Vec3 m_scale {300.0f, -300.0f, 300.0f};
+    inline static Vec3 m_scale {400.0f, -300.0f, 1.0f};
     inline static Vec3 m_offset {400.0f, 300.0f, 0.0f};
     Screen* m_screen;
 public:
     CoordinateTransformer(Screen& screen) : m_screen(&screen) {};
 
     void draw(Drawable& drawable) {
-        //perform backface culling here!!!
+        //backface culling
+        drawable.cullBackfaces();
 
         //perspective transformation
         drawable.applyTransformation(Mat4::perspective());
 
-        //how about backface culling here??????
-
-        //peform triangle clipping here
+        //perform triangle clipping here 
+        drawable.clipTriangles(); //currently only clips if all triangle vertices are out of screeen!!!!! NEED TO FIX!!!
 
         //viewport mapping
         drawable.applyTransformation(Mat4::translate(m_offset) * Mat4::scale(m_scale));
-        drawable.render(*m_screen);
+        drawable.draw(*m_screen);
     }
 
 };

@@ -10,9 +10,7 @@ namespace paint {
 
 class Entity {
 private:
-    const std::vector<Vec3> m_vertexBuffer;
-    const std::vector<Index> m_indexBuffer;
-    std::vector<bool> m_cullFlags;
+    Vertex m_vertexBuffer;
     Vec3 m_scale;
     float m_angle;
     Vec3 m_rotationAxis;
@@ -20,8 +18,7 @@ private:
     uint32_t m_color;
 public:
     Entity(Vertex vertex) :
-            m_vertexBuffer(vertex.vertexArray),
-            m_indexBuffer(vertex.indexArray),
+            m_vertexBuffer (vertex),
             m_scale({1.0f, 1.0f, 1.0f}),
             m_angle (0.0f),
             m_rotationAxis ({.0f, 1.0f, 1.0f}),
@@ -34,7 +31,7 @@ public:
 
     //these are all the model transforms
     Drawable getDrawable() {
-        Drawable d(m_vertexBuffer, m_indexBuffer, m_color);
+        Drawable d(m_vertexBuffer);
         d.applyTransformation(Mat4::translate(m_translation) * Mat4::rotate(m_angle, m_rotationAxis) * Mat4::scale(m_scale));
         return d;
     }
@@ -87,20 +84,7 @@ public:
         return m_scale;
     }
 
-    const std::vector<Vec3>& getVertexArray() const {
-        return m_vertexBuffer;
-    }
 
-
-    const std::vector<Index>& getIndexArray() const {
-        return m_indexBuffer;
-    }
-
-private:
-
-    void resetCullFlags() {
-        m_cullFlags.clear();
-    }
 
 };
 

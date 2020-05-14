@@ -25,36 +25,39 @@ int main()
     CoordinateTransformer ct(screen);
     Camera camera(ct);
 
-
+    //USING LEFT HAND COORDINATES (BUT I FUCKED UP AND WANTED TO USE RIGHT HAND)
     //create test entity
     Vertex vertex;
-    float s = 50.0f;
-    vertex.vertexArray.emplace_back(-s, -s, -s);
-    vertex.vertexArray.emplace_back(s, -s, -s);
-    vertex.vertexArray.emplace_back(s, s, -s);
-    vertex.vertexArray.emplace_back(-s, s, -s);
-    vertex.vertexArray.emplace_back(-s, -s, s);
-    vertex.vertexArray.emplace_back(s, -s, s);
-    vertex.vertexArray.emplace_back(s, s, s);
-    vertex.vertexArray.emplace_back(-s, s, s);
-    vertex.vertexArray.emplace_back(0.0f, 2* s, 0.0f);
-    vertex.indexArray.emplace_back(0, 1, 2);
-    vertex.indexArray.emplace_back(0, 2, 3);
-    vertex.indexArray.emplace_back(0, 4, 7);
-    vertex.indexArray.emplace_back(0, 3, 7);
-    vertex.indexArray.emplace_back(0, 4, 5);
-    vertex.indexArray.emplace_back(0, 1, 5);
-    vertex.indexArray.emplace_back(6, 5, 1);
-    vertex.indexArray.emplace_back(6, 2, 1);
-    vertex.indexArray.emplace_back(6, 3, 2);
-    vertex.indexArray.emplace_back(6, 3, 7);
-    vertex.indexArray.emplace_back(6, 4, 5);
-    vertex.indexArray.emplace_back(6, 4, 7);
-
-    vertex.indexArray.emplace_back(2,3,8);
-    vertex.indexArray.emplace_back(2,6,8);
-    vertex.indexArray.emplace_back(6,7,8);
-    vertex.indexArray.emplace_back(3,7,8);
+    float s = 100.0f;
+    vertex.positions.emplace_back(-s, -s, -s);
+    vertex.positions.emplace_back(s, -s, -s);
+    vertex.positions.emplace_back(s, s, -s);
+    vertex.positions.emplace_back(-s, s, -s);
+    vertex.positions.emplace_back(-s, -s, s);
+    vertex.positions.emplace_back(s, -s, s);
+    vertex.positions.emplace_back(s, s, s);
+    vertex.positions.emplace_back(-s, s, s);
+    vertex.positions.emplace_back(0.0f, 2* s, 0.0f);
+    //change order of vertices so that 
+    //first index is initial position of v1 and v2
+    //and second and third indices are endpoints of v1 and v2, respectively
+    vertex.indices.emplace_back(0, 2, 1);
+    vertex.indices.emplace_back(0, 3, 2);
+    vertex.indices.emplace_back(0, 7, 3);
+    vertex.indices.emplace_back(0, 4, 7);
+    vertex.indices.emplace_back(0, 5, 4);
+    vertex.indices.emplace_back(0, 1, 5);
+    vertex.indices.emplace_back(6, 5, 1);
+    vertex.indices.emplace_back(6, 1, 2);
+    vertex.indices.emplace_back(6, 2, 3);
+    vertex.indices.emplace_back(6, 3, 7);
+    vertex.indices.emplace_back(6, 4, 5);
+    vertex.indices.emplace_back(6, 7, 4);
+    
+    vertex.indices.emplace_back(2,3,8);
+    vertex.indices.emplace_back(2,8,6);
+    vertex.indices.emplace_back(6,8,7);
+    vertex.indices.emplace_back(3,7,8);
 
 
     Entity e(vertex);
@@ -62,9 +65,9 @@ int main()
     Entity e3(vertex);
 
     e.scaleBy({0.0f, 1.0f, 0.0f});
-    e.moveBy({0.0f, 50.0f, 150.0f});
-    e2.moveBy({-150.0f, 0.0f, 150.0f});
-    e3.moveBy({150.0f, 0.0f, 250.0f});
+    e.moveBy({0.0f, 100.0f, 900.0f});
+    e2.moveBy({-350.0f, 0.0f, 250.0f});
+    e3.moveBy({350.0f, 0.0f, 350.0f});
 
     bool play = true;
     while (play)

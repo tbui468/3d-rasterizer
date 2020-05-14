@@ -5,6 +5,7 @@
 #include "SDL.h"
 #include <vector>
 #include "Math.hpp"
+#include "Vertex.hpp"
 
 namespace paint {
 
@@ -49,7 +50,7 @@ public:
     void setColor(uint32_t color);
     void putPixel(int x, int y);
     void drawLine(float x0, float y0, float x1, float y1);
-    void drawPolygon(const std::vector<Vec3>& vertexBuffer, const Mat4& transformation, const std::vector<Index>& indexBuffer);
+    void drawPolygon(const Vertex& vertexBuffer, const Mat4& transformation);
     void fillTriangle(const Vec2& vec1, const Vec2& vec2, const Vec2& vec3);
     void render();
     void clear();
