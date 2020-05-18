@@ -379,8 +379,26 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
             return m;
         }
 
+        //need to change how camera moves if using orthographic projection
         static Mat4 orthogonal() {
             Mat4 m;
+
+            float l = -400.0f; //
+            float r = 400.0f;
+            float t = 300.0f;
+            float b = -300.0f;
+            float n = 200.0f; //near clipping plane
+            float f = 10000.0f; //far clipping plane
+
+            m.firstCol.x = 2.0f / (r - l);
+            m.secondCol.y = 2.0f / (t - b); 
+            m.thirdCol.z = 2.0f / (f - n);
+
+            m.fourthCol.x = -(r + l) / (r - l);
+            m.fourthCol.y = -(t + b) / (t - b);
+            m.fourthCol.z = -(f + n) / (f - n);
+            m.fourthCol.w = 1.0f;
+
             return m;
         }
 

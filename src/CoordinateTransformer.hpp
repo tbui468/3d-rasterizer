@@ -19,13 +19,18 @@ public:
     CoordinateTransformer(Screen& screen) : m_screen(&screen) {};
 
     void draw(Drawable& drawable) {
-        //backface culling
+        drawable.clearCullFlags();
+
+        //backface culling before perspective transform
         drawable.cullBackfaces();
 
         //perspective transformation
         drawable.applyTransformation(Mat4::perspective());
+//        drawable.applyTransformation(Mat4::orthogonal());
 
-        //perform triangle clipping here 
+
+        //perform triangle clipping here  (in homogeneous space)
+        //Sutherland Hodgman polygon clipping algorithm (for 3d space)
         drawable.clipTriangles(); //currently only clips if all triangle vertices are out of screeen!!!!! NEED TO FIX!!!
 
         //viewport mapping

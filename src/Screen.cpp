@@ -80,16 +80,19 @@ void Screen::putPixel(int x, int y)
 
 void Screen::drawLine(float x0f, float y0f, float x1f, float y1f)
 {
-    /*BRESEHAM'S ALGORITHM*/
+    /*BRESENHAM'S ALGORITHM*/
     int x0 = int(x0f);
     int y0 = int(y0f);
     int x1 = int(x1f);
     int y1 = int(y1f);
 
-    int sx = x0 < x1 ? 1 : -1;
-    int sy = y0 < y1 ? 1 : -1;
+    int sx = x0 < x1 ? 1 : -1;  //chooses positive or negative increment for each iteration
+    int sy = y0 < y1 ? 1 : -1; //same for y
 
-    if (y0 == y1)
+    int dx = abs(x1 - x0); //find horizontal distance between endpoints
+    int dy = -abs(y1 - y0); //find vertical distance between endpoints (but negative????)
+
+    if (dy == 0)
     { //horizontal line
         while(true) {
             putPixel(x0, y0);
@@ -98,7 +101,7 @@ void Screen::drawLine(float x0f, float y0f, float x1f, float y1f)
             x0 += sx;
         }
     }
-    else if (x0 == x1)
+    else if (dx == 0)
     { //vertical line
         while(true) {
             putPixel(x0, y0);
@@ -109,27 +112,25 @@ void Screen::drawLine(float x0f, float y0f, float x1f, float y1f)
     }
     else
     {
-        int dx = abs(x1 - x0);
-        int dy = -abs(y1 - y0);
-        int err = dx + dy;
+        int err = dx + dy; //????Not sure what is happening here.  Initializing err
 
         while (true)
         {
-            putPixel(x0, y0);
-            if (x0 == x1 && y0 == y1)
+            putPixel(x0, y0); //draw pixel at x0, y0
+            if (x0 == x1 && y0 == y1) //leave loop if both points are on the same pixel
             {
                 break;
             }
-            int e2 = 2 * err;
+            int e2 = 2 * err; //what is this two doing??
             if (e2 > dy)
             {
-                err += dy;
-                x0 += sx;
+                err += dy; //decrease by initial distance between y1 and y0
+                x0 += sx; //increment by 1 closer to x1
             }
             if (e2 <= dx)
             {
-                err += dx;
-                y0 += sy;
+                err += dx; //increase by initial distance between x1 and x0
+                y0 += sy; //increment by 1 closer to y1
             }
         }
     }
@@ -148,7 +149,7 @@ void Screen::drawPolygon(const Vertex &vertexBuffer, const Mat4 &transformation)
     {
         Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
         v4 = transformation * v4;
-        if(v4.w > 0.01f) //geometric clipping will take care of negative and 0 w'.  So this line won't be necessary
+        if(abs(v4.w) > 0.01f) //geometric clipping will take care of negative and 0 w'.  So this line won't be necessary
             transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w); //perspective division
         else
             transformedVB.emplace_back(0.0f, 0.0f, 0.0f); //perspective division
@@ -165,22 +166,24 @@ void Screen::drawPolygon(const Vertex &vertexBuffer, const Mat4 &transformation)
         assert(i.x < vertexBufferSize);
         assert(i.y < vertexBufferSize);
         assert(i.z < vertexBufferSize);
+        /*
         float scale = transformedVB.at(i.x).z; //should be between 0 and 1 if inside screen
         scale *= scale;
         scale = 1.0f - scale;
         scale *= 255.0f;
-        setColor(int(scale), int(scale), int(scale));
+        setColor(char(scale), char(scale), char(scale));
         drawLine(transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.y).x, transformedVB.at(i.y).y);
         drawLine(transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.z).x, transformedVB.at(i.z).y);
-        drawLine(transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.x).x, transformedVB.at(i.x).y);
-/*
+        drawLine(transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.x).x, transformedVB.at(i.x).y);*/
+
+
         Vec2 vec[3];
         vec[0] = {transformedVB.at(i.x).x, transformedVB.at(i.x).y};
         vec[1] = {transformedVB.at(i.y).x, transformedVB.at(i.y).y};
         vec[2] = {transformedVB.at(i.z).x, transformedVB.at(i.z).y};
         color += 20;
         setColor(color, color, color);
-        fillTriangle(vec[0], vec[1], vec[2]);*/
+        fillTriangle(vec[0], vec[1], vec[2]);
     }
 }
 
@@ -194,22 +197,16 @@ void Screen::fillTriangle(const Vec2 &vec1, const Vec2 &vec2, const Vec2 &vec3)
 
     //check to swap top and mid
     if(top->y > mid->y) {
-        const Vec2* topHolder = top;
-        top = mid;
-        mid = topHolder;
+        std::swap(top, mid);
     }
 
     //check to swap mid and bot
     if(mid->y > bot->y) {
-        const Vec2* midHolder = mid;
-        mid = bot;
-        bot = midHolder;
+        std::swap(mid, bot);
 
         //check if top and mid need to be swapped after mid/bottom swap
         if(top->y > mid->y) {
-            const Vec2* topHolder = top;
-            top = mid;
-            mid = topHolder;
+            std::swap(top, mid);
         }
     }
 
@@ -236,75 +233,140 @@ void Screen::fillFlatBottomTriangle(const Vec2& top, const Vec2& bot1, const Vec
     const Vec2* left = &bot1;
     const Vec2* right = &bot2;
     if(left->x > right->x) {
-        const Vec2* leftHolder = left;
-        left = right;
-        right = leftHolder;
+        std::swap(left, right);
     }
 
-    float leftA = top.y - left->y;
-    float leftB = left->x - top.x;
-    float leftC = top.x * left->y - left->x * top.y;
+    //left line
+    int y0l = int(top.y);
+    int x0l = int(top.x);
+    int y1l = int(left->y);
+    int x1l = int(left->x);
+    int sxl = x0l < x1l ? 1 : -1;
+    int syl = y0l < y1l ? 1 : -1;
+    int dxl = abs(x1l - x0l);
+    int dyl = -abs(y1l - y0l);
+    int errl = dxl + dyl;
 
+    //right line
+    int y0r = int(top.y);
+    int x0r = int(top.x);
+    int y1r = int(right->y);
+    int x1r = int(right->x);
+    int sxr = x0r < x1r ? 1 : -1;
+    int syr = y0r < y1r ? 1 : -1;
+    int dxr = abs(x1r - x0r);
+    int dyr = -abs(y1r - y0r);
+    int errr = dxr + dyr;
 
-    float rightA = top.y - right->y;
-    float rightB = right->x - top.x;
-    float rightC = top.x * right->y - right->x * top.y;
-
-    float yStart = top.y;
-    float yEnd = bot1.y;
-
-    while(yStart < yEnd) {
-        float xStart;
-        if(abs(leftA) > 0.01f)
-            xStart = (-leftB * yStart - leftC) / leftA;
-        else //approx. vertical line between left side and top
-            xStart = top.x;
-
-        float xEnd;
-        if(abs(rightA) > 0.01f)
-            xEnd = (-rightB * yStart - rightC) / rightA;
-        else //approx. vertical line between right sid and top
-            xEnd = top.x;
-        drawLine(xStart, yStart, xEnd, yStart);
-        yStart += 1.0f;
+    while (true)
+    {
+        drawLine(x0l, y0l, x0r, y0r);
+        if (y0r == y1l)
+        {
+            break;
+        }
+        //loop left until y0l is incremented by 1
+        while(true) {
+            if(x0l == x1l && y0l == y1l)
+                break;
+            int e2 = errl * 2; 
+            if(e2 >= dyl) {
+                errl += dyl;
+                x0l += sxl;
+            }
+            if(e2 <= dxl){
+                errl += dxl;
+                y0l += syl;
+                break;
+            }
+        }
+        //loop right until y0r is incremented by 1 (and equal to y0l)
+        while(true) {
+            if(x0r == x1r && y0r == y1r)
+                break;
+            int e2 = errr * 2; 
+            if(e2 >= dyr) {
+                errr += dyr;
+                x0r += sxr;
+            }
+            if(e2 <= dxr){
+                errr += dxr;
+                y0r += syr;
+                break;
+            }
+        }
     }
 }
 
-
-void Screen::fillFlatTopTriangle(const Vec2& top1, const Vec2& top2, const Vec2& bot) {
-    const Vec2* left = &top1;
-    const Vec2* right = &top2;
-    if(left->x > right->x) {
-        const Vec2* leftHolder = left;
-        left = right;
-        right = leftHolder;
+void Screen::fillFlatTopTriangle(const Vec2 &top1, const Vec2 &top2, const Vec2 &bot)
+{
+    const Vec2 *left = &top1;
+    const Vec2 *right = &top2;
+    if (left->x > right->x)
+    {
+        std::swap(left, right);
     }
 
-    float leftA = bot.y - left->y;
-    float leftB = left->x - bot.x;
-    float leftC = bot.x * left->y - left->x * bot.y;
 
+    //left line
+    int y0l = int(left->y);
+    int x0l = int(left->x);
+    int y1l = int(bot.y);
+    int x1l = int(bot.x);
+    int sxl = x0l < x1l ? 1 : -1;
+    int syl = y0l < y1l ? 1 : -1;
+    int dxl = abs(x1l - x0l);
+    int dyl = -abs(y1l - y0l);
+    int errl = dxl + dyl;
 
-    float rightA = bot.y - right->y;
-    float rightB = right->x - bot.x;
-    float rightC = bot.x * right->y - right->x * bot.y;
+    //right line
+    int y0r = int(right->y);
+    int x0r = int(right->x);
+    int y1r = int(bot.y);
+    int x1r = int(bot.x);
+    int sxr = x0r < x1r ? 1 : -1;
+    int syr = y0r < y1r ? 1 : -1;
+    int dxr = abs(x1r - x0r);
+    int dyr = -abs(y1r - y0r);
+    int errr = dxr + dyr;
 
-    float yStart = top1.y;
-    float yEnd = bot.y;
-
-    while(yStart < yEnd) {
-        float xStart;
-        if(abs(leftA) > 0.01f)
-            xStart = (-leftB * yStart - leftC) / leftA;
-        else //approx. vertical between left side and bottom
-            xStart = bot.x;
-        float xEnd;
-        if(abs(rightA) > 0.01f)
-            xEnd = (-rightB * yStart - rightC) / rightA;
-        else //approx vertical between rightside and bottom
-            xEnd = bot.x;
-        drawLine(xStart, yStart, xEnd, yStart);
-        yStart += 1.0f;
+    while (true)
+    {
+        drawLine(x0l, y0l, x0r, y0r);
+        if (y0r == y1l)
+        {
+            break;
+        }
+        //loop left until y0l is incremented by 1
+        while(true) {
+            if(x0l == x1l && y0l == y1l)
+                break;
+            int e2 = errl * 2; 
+            if(e2 >= dyl) {
+                errl += dyl;
+                x0l += sxl;
+            }
+            if(e2 <= dxl){
+                errl += dxl;
+                y0l += syl;
+                break;
+            }
+        }
+        //loop right until y0r is incremented by 1 (and equal to y0l)
+        while(true) {
+            if(x0r == x1r && y0r == y1r)
+                break;
+            int e2 = errr * 2; 
+            if(e2 >= dyr) {
+                errr += dyr;
+                x0r += sxr;
+            }
+            if(e2 <= dxr){
+                errr += dxr;
+                y0r += syr;
+                break;
+            }
+        }
     }
 
 }

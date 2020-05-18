@@ -13,8 +13,12 @@ namespace paint {
 //stack all translations and scaling 
 class Drawable {
 private:
+    //instead of pointer, keep own copy of Vertex
+    //because I need to modify the triangles (indices) and vertex positions
+    //when performing triangle clipping
     Vertex* m_vertexBuffer;
     Mat4 m_transformation;
+    std::vector<Vec4> m_HGVertices;
 public:
     Drawable(Vertex& vertexBuffer):  
                 m_vertexBuffer(&vertexBuffer)
@@ -43,21 +47,12 @@ public:
 
     //set cull flags
     void cullBackfaces() {
-        clearCullFlags();
-        std::vector<Vec4> tVertices;
-
-        //transform all vertices
-        for(const Vec3& v : m_vertexBuffer->positions) {
-            Vec4 tv = {v.x, v.y, v.z, 1.0f};
-            tv = m_transformation * tv; 
-            tVertices.push_back(tv);
-        }
-    
+        applyVertexShader();
         for(const Index& i : m_vertexBuffer->indices) {
             //get vector from origin to first point on 
-            Vec4 vertexPosX = tVertices.at(i.x);
-            Vec4 vertexPosY = tVertices.at(i.y);
-            Vec4 vertexPosZ = tVertices.at(i.z);
+            Vec4 vertexPosX = m_HGVertices.at(i.x);
+            Vec4 vertexPosY = m_HGVertices.at(i.y);
+            Vec4 vertexPosZ = m_HGVertices.at(i.z);
             Vec4 origin = {0.0f, 0.0f, 0.0f, 0.0f};
             Vec4 triDir = vertexPosX - origin;
             
@@ -70,6 +65,7 @@ public:
             Vec3 triDirc {triDir.x, triDir.y, triDir.z};
 
             Vec3 normal = v1c.crossProduct(v2c);
+            
             if(triDirc * normal > 0.0f) {
                 m_vertexBuffer->cullFlags.push_back(true);
             }else{
@@ -79,22 +75,14 @@ public:
     }
 
     void clipTriangles() {
-        std::vector<Vec4> tVertices;
-
-        //transform all vertices (include perspective transforms)
-        for(const Vec3& v : m_vertexBuffer->positions) {
-            Vec4 tv = {v.x, v.y, v.z, 1.0f};
-            tv = m_transformation * tv; 
-            tVertices.push_back(tv);
-        }
+        applyVertexShader();
         for(unsigned int k = 0; k < m_vertexBuffer->indices.size(); ++k)
-//        for(const Index& i : m_vertexBuffer->indices) {
             {
             const Index& i = m_vertexBuffer->indices.at(k);
             //get vector from origin to first point on 
-            Vec4 vertexPosX = tVertices.at(i.x);
-            Vec4 vertexPosY = tVertices.at(i.y);
-            Vec4 vertexPosZ = tVertices.at(i.z);
+            Vec4 vertexPosX = m_HGVertices.at(i.x);
+            Vec4 vertexPosY = m_HGVertices.at(i.y);
+            Vec4 vertexPosZ = m_HGVertices.at(i.z);
 
 
             bool clipTri = clip(vertexPosX) && clip(vertexPosY) && clip(vertexPosZ);
@@ -104,11 +92,24 @@ public:
         }
     }
 
-private:
+
+    //puts homogeneous vertices (Vec4) into m_HGVertices
+    void applyVertexShader() {
+        clearHGVertices();
+
+        //transform all vertices 
+        for(const Vec3& v : m_vertexBuffer->positions) {
+            Vec4 tv = {v.x, v.y, v.z, 1.0f};
+            tv = m_transformation * tv; 
+            m_HGVertices.push_back(tv);
+        }
+    }
+
     void clearCullFlags() {
         m_vertexBuffer->cullFlags.clear();
     }
 
+private:
     //simple clipping if all vertices are outside of clipping plane
     //NEED TO REDO!!!!!
     bool clip(Vec4 v) {
@@ -116,8 +117,13 @@ private:
         bool outY = abs(v.y) > v.w;
         bool outZ = v.z > v.w || v.z < 0.0f;
 
-        return outX && outY && outZ;
+        return outX || outY || outZ;
     }
+
+    void clearHGVertices() {
+        m_HGVertices.clear();
+    }
+
 
 };
 

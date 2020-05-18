@@ -53,7 +53,6 @@ int main()
     vertex.indices.emplace_back(6, 3, 7);
     vertex.indices.emplace_back(6, 4, 5);
     vertex.indices.emplace_back(6, 7, 4);
-    
     vertex.indices.emplace_back(2,3,8);
     vertex.indices.emplace_back(2,8,6);
     vertex.indices.emplace_back(6,8,7);
