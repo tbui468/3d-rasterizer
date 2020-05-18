@@ -31,7 +31,7 @@ public:
 
         //perform triangle clipping here  (in homogeneous space)
         //Sutherland Hodgman polygon clipping algorithm (for 3d space)
-        drawable.clipTriangles(); //currently only clips if all triangle vertices are out of screeen!!!!! NEED TO FIX!!!
+        //drawable.clipTriangles(); //currently only clips if all triangle vertices are out of screeen!!!!! NEED TO FIX!!!
 
         //viewport mapping
         drawable.applyTransformation(Mat4::translate(m_offset) * Mat4::scale(m_scale));

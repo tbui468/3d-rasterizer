@@ -39,6 +39,7 @@ private:
     SDL_Renderer* m_renderer;
     SDL_Texture* m_texture;
     Uint32* m_buffer; 
+    int* m_zBuffer;
     Uint32 m_color;
     std::vector<Input> m_inputs; 
     const int SCREEN_HEIGHT;
@@ -48,10 +49,10 @@ public:
     bool initialize();
     void setColor(Uint8 red, Uint8 green, Uint8 blue);
     void setColor(uint32_t color);
-    void putPixel(int x, int y);
-    void drawLine(float x0, float y0, float x1, float y1);
+    void putPixel(int x, int y, int z);
+    void drawLine(int x0, int y0, int z0, int x1, int y1, int z1);
     void drawPolygon(const Vertex& vertexBuffer, const Mat4& transformation);
-    void fillTriangle(const Vec2& vec1, const Vec2& vec2, const Vec2& vec3);
+    void fillTriangle(const Vec3& vec1, const Vec3& vec2, const Vec3& vec3);
     void render();
     void clear();
     void processEvents(); //retrieves user input and fills m_inputs
@@ -59,8 +60,8 @@ public:
     inline bool hasEvents() const { return m_inputs.size() > 0;};
     void close();
 private:
-    void fillFlatTopTriangle(const Vec2& vec1, const Vec2& vec2, const Vec2& vec3);
-    void fillFlatBottomTriangle(const Vec2& vec1, const Vec2& vec2, const Vec2& vec3);
+    void fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, const Vec3& v3);
+    void resetZBuffer(); //sets z buffer distances to infinity (large number)
 };
 
 }

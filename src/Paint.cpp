@@ -28,7 +28,7 @@ int main()
     //USING LEFT HAND COORDINATES (BUT I FUCKED UP AND WANTED TO USE RIGHT HAND)
     //create test entity
     Vertex vertex;
-    float s = 100.0f;
+    float s = 10.0f;
     vertex.positions.emplace_back(-s, -s, -s);
     vertex.positions.emplace_back(s, -s, -s);
     vertex.positions.emplace_back(s, s, -s);
@@ -64,9 +64,9 @@ int main()
     Entity e3(vertex);
 
     e.scaleBy({0.0f, 1.0f, 0.0f});
-    e.moveBy({0.0f, 100.0f, 900.0f});
-    e2.moveBy({-350.0f, 0.0f, 250.0f});
-    e3.moveBy({350.0f, 0.0f, 350.0f});
+    e.moveBy({0.0f, s, 200.0f});
+    e2.moveBy({-100.0f, 0.0f, 150.0f});
+    e3.moveBy({100.0f, 0.0f, 150.0f});
 
     bool play = true;
     while (play)
