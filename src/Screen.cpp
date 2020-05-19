@@ -1,6 +1,7 @@
 #include "Screen.hpp"
 #include <memory>
 #include <assert.h>
+#include <limits>
 
 namespace paint
 {
@@ -82,9 +83,8 @@ void Screen::putPixel(int x, int y, int z)
         return;
 
     int index = y * SCREEN_WIDTH + x;
-    //check z-buffer and u
+    //check z-buffer
     if(z < m_zBuffer[index]) {
-//    if(true){
         m_zBuffer[index] = z;
         m_buffer[index] = m_color;
     }
@@ -103,7 +103,7 @@ void Screen::drawLine(int x0, int y0, int z0, int x1, int y1, int z1)
     int dz = -abs(z1 - z0);
 
     if (dy == 0)
-    { //horizontal line (also used for rasterizing triangles)
+    { //horizontal line (used for rasterizing triangles)
         int err = dx + dz;
         while(true) {
             putPixel(x0, y0, z0);
@@ -163,19 +163,22 @@ void Screen::drawPolygon(const Vertex &vertexBuffer, const Mat4 &transformation)
 
     //apply transformation to model and load into new vertex
     unsigned int vertexBufferSize = vertexBuffer.positions.size();
-    std::vector<Vec3> transformedVB;
-    for (const Vec3 &v3 : vertexBuffer.positions)
+    std::vector<Vec4> transformedVB;
+    for (const Vec4 &v : vertexBuffer.positions)
     {
-        Vec4 v4 = {v3.x, v3.y, v3.z, 1.0f};
-        v4 = transformation * v4;
+        Vec4 v4 = transformation * v;
         if(abs(v4.w) > 0.01f) //geometric clipping will take care of negative and 0 w'.  So this line won't be necessary
-            transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w); //perspective division
+            transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w, 1.0f); //perspective division
         else
-            transformedVB.emplace_back(0.0f, 0.0f, 0.0f); //perspective division
+            transformedVB.emplace_back(0.0f, 0.0f, 0.0f, 1.0f); //perspective division
     }
 
     //draw each transformed vertex using index buffer
-    char color = 10;
+    char color[14];
+    for(char i = 0; i < 14; ++i) {
+        color[i] = 255 - i * 16;
+    }
+
     for(unsigned int k = 0; k < vertexBuffer.indices.size(); ++k) 
     {
         const Index& i = vertexBuffer.indices.at(k);
@@ -200,8 +203,8 @@ void Screen::drawPolygon(const Vertex &vertexBuffer, const Mat4 &transformation)
         vec[0] = {transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.x).z};
         vec[1] = {transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.y).z};
         vec[2] = {transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.z).z};
-        color += 20;
-        setColor(color, color, color);
+
+        setColor(200, 200, color[k]);
         fillTriangle(vec[0], vec[1], vec[2]);
     }
 }
@@ -265,10 +268,10 @@ void Screen::fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, co
     //left line
     int x0l = int(v0.x);
     int y0l = int(v0.y);
-    int z0l = int(v0.z * 5000.0f);
+    int z0l = int(v0.z);
     int x1l = int(v1.x);
     int y1l = int(v1.y);
-    int z1l = int(v1.z * 5000.0f);
+    int z1l = int(v1.z);
     int sxl = x0l < x1l ? 1 : -1;
     int syl = y0l < y1l ? 1 : -1;
     int szl = z0l < z1l ? 1 : -1;
@@ -283,10 +286,10 @@ void Screen::fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, co
     //right line
     int x0r = int(v2.x);
     int y0r = int(v2.y);
-    int z0r = int(v2.z * 5000.0f);
+    int z0r = int(v2.z);
     int x1r = int(v3.x);
     int y1r = int(v3.y);
-    int z1r = int(v3.z * 5000.0f);
+    int z1r = int(v3.z);
     int sxr = x0r < x1r ? 1 : -1;
     int syr = y0r < y1r ? 1 : -1;
     int szr = z0r < z1r ? 1 : -1;
@@ -472,8 +475,6 @@ Input Screen::getNextEvent()
 void Screen::resetZBuffer() {
     for(int row = 0; row < SCREEN_HEIGHT; ++row) {
         for(int col = 0; col < SCREEN_WIDTH; ++col) {
-            //m_zBuffer[row * SCREEN_WIDTH + col] = std::numeric_limits<int>::infinity();
-
             m_zBuffer[row * SCREEN_WIDTH + col] = 10000;
         }
     }

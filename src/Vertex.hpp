@@ -7,7 +7,7 @@
 namespace paint {
 
 struct Vertex {
-    std::vector<Vec3> positions;
+    std::vector<Vec4> positions; 
     std::vector<Index> indices; 
     std::vector<bool> cullFlags;  
 };

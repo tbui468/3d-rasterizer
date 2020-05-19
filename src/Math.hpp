@@ -241,6 +241,9 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         float z;
         float w;
 
+        Vec4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {};
+        Vec4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {};
+
         //add another Vec4
         Vec4 operator+(const Vec4 &other) const
         {
@@ -388,7 +391,7 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
             float t = 300.0f;
             float b = -300.0f;
             float n = 200.0f; //near clipping plane
-            float f = 10000.0f; //far clipping plane
+            float f = 1000.0f; //far clipping plane
 
             m.firstCol.x = 2.0f / (r - l);
             m.secondCol.y = 2.0f / (t - b); 
@@ -403,6 +406,21 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         }
 
     };
+
+    static bool hasPlaneLineIntersection(Vec3 planeNormal, Vec3 lineDirection){
+        if(planeNormal * lineDirection != 0)
+            return true;
+        else
+            return false;
+    }
+
+    static Vec3 getPlaneLineIntersection(Vec3 planePoint, Vec3 planeNormal, Vec3 linePoint, Vec3 lineDirection) {
+        assert(hasPlaneLineIntersection(planeNormal, lineDirection));
+        float num = (planePoint - linePoint) * planeNormal;
+        float den = lineDirection * planeNormal;
+        float scalar = num / den;
+        return linePoint + lineDirection * scalar;
+    }
 
 
 } // namespace paint

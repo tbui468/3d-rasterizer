@@ -20,6 +20,19 @@ using namespace paint;
 
 int main()
 {
+    //testing line/plane intersection
+    //x-y plane
+    Vec3 planePoint = {4.3f, 10.0f, 0.0f};
+    Vec3 planeNormal = {0.0f, 0.0f, 4.0f};
+    Vec3 linePoint = {3.0f, 8.0f, -3.0f};
+    Vec3 lineDirection = {0.0f, 0.0f, 2.0f};
+
+    if(hasPlaneLineIntersection(planeNormal, lineDirection)) {
+        Vec3 intersection = getPlaneLineIntersection(planePoint, planeNormal, linePoint, lineDirection);
+        std::cout << intersection.x << ", " << intersection.y << ", " << intersection.z << std::endl;
+    }
+
+
     Screen screen(800, 600);
 
     CoordinateTransformer ct(screen);
@@ -29,15 +42,15 @@ int main()
     //create test entity
     Vertex vertex;
     float s = 10.0f;
-    vertex.positions.emplace_back(-s, -s, -s);
-    vertex.positions.emplace_back(s, -s, -s);
-    vertex.positions.emplace_back(s, s, -s);
-    vertex.positions.emplace_back(-s, s, -s);
-    vertex.positions.emplace_back(-s, -s, s);
-    vertex.positions.emplace_back(s, -s, s);
-    vertex.positions.emplace_back(s, s, s);
-    vertex.positions.emplace_back(-s, s, s);
-    vertex.positions.emplace_back(0.0f, 2* s, 0.0f);
+    vertex.positions.emplace_back(-s, -s, -s, 1.0f);
+    vertex.positions.emplace_back(s, -s, -s, 1.0f);
+    vertex.positions.emplace_back(s, s, -s, 1.0f);
+    vertex.positions.emplace_back(-s, s, -s, 1.0f);
+    vertex.positions.emplace_back(-s, -s, s, 1.0f);
+    vertex.positions.emplace_back(s, -s, s, 1.0f);
+    vertex.positions.emplace_back(s, s, s, 1.0f);
+    vertex.positions.emplace_back(-s, s, s, 1.0f);
+    vertex.positions.emplace_back(0.0f, 2* s, 0.0f, 1.0f);
     //change order of vertices so that 
     //first index is initial position of v1 and v2
     //and second and third indices are endpoints of v1 and v2, respectively
@@ -65,8 +78,8 @@ int main()
 
     e.scaleBy({0.0f, 1.0f, 0.0f});
     e.moveBy({0.0f, s, 200.0f});
-    e2.moveBy({-100.0f, 0.0f, 150.0f});
-    e3.moveBy({100.0f, 0.0f, 150.0f});
+    e2.moveBy({-50.0f, 0.0f, 150.0f});
+    e3.moveBy({50.0f, 0.0f, 150.0f});
 
     bool play = true;
     while (play)
@@ -96,16 +109,16 @@ int main()
                 camera.moveBy({2.66f, 0.0f, 0.0f});
                 break;
             case Input::PeekLeft:
-                camera.pan(-0.01f);
+                camera.pan(-0.02f);
                 break;
             case Input::PeekRight:
-                camera.pan(0.01f);
+                camera.pan(0.02f);
                 break;
             case Input::ZoomIn:
-                camera.tilt(0.01f);
+                camera.tilt(0.02f);
                 break;
             case Input::ZoomOut:
-                camera.tilt(-0.01f);
+                camera.tilt(-0.02f);
                 break;
             case Input::CameraUp:
                 camera.moveBy({0.0f, 0.01f, 0.0f});
