@@ -51,7 +51,7 @@ public:
     void setColor(uint32_t color);
     void putPixel(int x, int y, int z);
     void drawLine(int x0, int y0, int z0, int x1, int y1, int z1);
-    void drawPolygon(const Vertex& vertexBuffer, const Mat4& transformation);
+    void drawPolygon(Vertex& vertexBuffer);
     void fillTriangle(const Vec3& vec1, const Vec3& vec2, const Vec3& vec3);
     void render();
     void clear();

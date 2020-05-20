@@ -13,6 +13,7 @@ namespace paint
         T c;
     };
 
+
     struct Index
     {
         unsigned int x;
@@ -414,12 +415,25 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
             return false;
     }
 
-    static Vec3 getPlaneLineIntersection(Vec3 planePoint, Vec3 planeNormal, Vec3 linePoint, Vec3 lineDirection) {
-        assert(hasPlaneLineIntersection(planeNormal, lineDirection));
-        float num = (planePoint - linePoint) * planeNormal;
-        float den = lineDirection * planeNormal;
+
+
+    struct Plane {
+        Vec3 point;
+        Vec3 normal;
+    };
+
+    struct Line {
+        Vec3 point;
+        Vec3 direction;
+    };
+
+
+    static Vec3 getPlaneLineIntersection(Plane plane, Line line) {
+        assert(hasPlaneLineIntersection(plane.normal, line.direction));
+        float num = (plane.point - line.point) * plane.normal;
+        float den = line.direction * plane.normal;
         float scalar = num / den;
-        return linePoint + lineDirection * scalar;
+        return line.point + line.direction * scalar;
     }
 
 

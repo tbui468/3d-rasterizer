@@ -19,6 +19,10 @@ public:
     Camera(CoordinateTransformer ct) : m_CT(ct), m_translation({0.0f, 0.0f, 0.0f}), m_scale({1.0f, 1.0f, 1.0f}),
                                        m_angle(0.0f), m_tiltAngle(0.0f), m_rotationAxis({0.0f, 1.0f, 0.0f}) {};
 
+    Vec3 getLocation() const {
+        return m_translation;
+    }
+
     //view transforms
     void draw(Drawable&& drawable) {
         drawable.applyTransformation(Mat4::rotate(-m_tiltAngle, {1.0f, 0.0f, 0.0f}) * Mat4::rotate(-m_angle, m_rotationAxis) * Mat4::scale(m_scale) * Mat4::translate(m_translation * (-1)));

@@ -20,17 +20,6 @@ using namespace paint;
 
 int main()
 {
-    //testing line/plane intersection
-    //x-y plane
-    Vec3 planePoint = {4.3f, 10.0f, 0.0f};
-    Vec3 planeNormal = {0.0f, 0.0f, 4.0f};
-    Vec3 linePoint = {3.0f, 8.0f, -3.0f};
-    Vec3 lineDirection = {0.0f, 0.0f, 2.0f};
-
-    if(hasPlaneLineIntersection(planeNormal, lineDirection)) {
-        Vec3 intersection = getPlaneLineIntersection(planePoint, planeNormal, linePoint, lineDirection);
-        std::cout << intersection.x << ", " << intersection.y << ", " << intersection.z << std::endl;
-    }
 
 
     Screen screen(800, 600);
@@ -41,7 +30,7 @@ int main()
     //USING LEFT HAND COORDINATES (BUT I FUCKED UP AND WANTED TO USE RIGHT HAND)
     //create test entity
     Vertex vertex;
-    float s = 10.0f;
+    float s = 200.0f;
     vertex.positions.emplace_back(-s, -s, -s, 1.0f);
     vertex.positions.emplace_back(s, -s, -s, 1.0f);
     vertex.positions.emplace_back(s, s, -s, 1.0f);
@@ -71,15 +60,26 @@ int main()
     vertex.indices.emplace_back(6,8,7);
     vertex.indices.emplace_back(3,7,8);
 
+    Vertex floorVertex;
+    float f = 1000.0f;
+    floorVertex.positions.emplace_back(-f, 3000.0f, -f, 1.0f);
+    floorVertex.positions.emplace_back(f, 3000.0f, -f, 1.0f);
+    floorVertex.positions.emplace_back(f, 3000.0f, f, 1.0f);
+    floorVertex.positions.emplace_back(-f, 3000.0f, f, 1.0f);
+    floorVertex.indices.emplace_back(0, 1, 2);
+    floorVertex.indices.emplace_back(0, 2, 3);
+
 
     Entity e(vertex);
     Entity e2(vertex);
     Entity e3(vertex);
+    Entity floor(floorVertex);
 
     e.scaleBy({0.0f, 1.0f, 0.0f});
-    e.moveBy({0.0f, s, 200.0f});
-    e2.moveBy({-50.0f, 0.0f, 150.0f});
-    e3.moveBy({50.0f, 0.0f, 150.0f});
+    e.moveBy({0.0f, s, 8000.0f});
+    e2.moveBy({-1000.5f, 0.0f, 7840.5f});
+    floor.moveBy({0.0f, 0.0f, 8000.0f});
+//    e3.moveBy({30.5f, 0.0f, 140.5f});
 
     bool play = true;
     while (play)
@@ -97,28 +97,28 @@ int main()
                 play = false;
                 break;
             case Input::Forward:
-                camera.moveBy({0.0f, 0.0f, 2.0f});
+                camera.moveBy({0.0f, 0.0f, 60.0f});
                 break;
             case Input::Backward:
-                camera.moveBy({0.0f, 0.0f, -2.0f});
+                camera.moveBy({0.0f, 0.0f, -60.0f});
                 break;
             case Input::StrafeLeft:
-                camera.moveBy({-2.66f, 0.0f, 0.0f});
+                camera.moveBy({-80.0f, 0.0f, 0.0f});
                 break;
             case Input::StrafeRight:
-                camera.moveBy({2.66f, 0.0f, 0.0f});
+                camera.moveBy({80.0f, 0.0f, 0.0f});
                 break;
             case Input::PeekLeft:
-                camera.pan(-0.02f);
+                camera.pan(-0.05f);
                 break;
             case Input::PeekRight:
-                camera.pan(0.02f);
+                camera.pan(0.05f);
                 break;
             case Input::ZoomIn:
-                camera.tilt(0.02f);
+                camera.tilt(0.05f);
                 break;
             case Input::ZoomOut:
-                camera.tilt(-0.02f);
+                camera.tilt(-0.05f);
                 break;
             case Input::CameraUp:
                 camera.moveBy({0.0f, 0.01f, 0.0f});
@@ -149,11 +149,17 @@ int main()
 
         camera.draw(e.getDrawable());
         camera.draw(e2.getDrawable());
-        camera.draw(e3.getDrawable());
+        camera.draw(floor.getDrawable());
+//        camera.draw(e3.getDrawable());
 
 
 
 //        screen.drawLine(0.0f, 300.0f, 800.0f, 300.0f);
+
+        Vec3 eLoc = e.getPosition();
+        Vec3 loc = camera.getLocation();
+        Vec3 dis = eLoc - loc;
+        std::cout << dis.magnitude() << std::endl;
 
         screen.render();
     }

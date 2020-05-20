@@ -156,29 +156,27 @@ void Screen::drawLine(int x0, int y0, int z0, int x1, int y1, int z1)
 }
 
 //draw model(THis can be processed by GPU for better performance, such as using CUDA)
-void Screen::drawPolygon(const Vertex &vertexBuffer, const Mat4 &transformation)
+void Screen::drawPolygon(Vertex &vertexBuffer)
 {
-    assert(vertexBuffer.indices.size() == vertexBuffer.cullFlags.size());
+    assert(vertexBuffer.indices.size() <= vertexBuffer.cullFlags.size());
 
-
-    //apply transformation to model and load into new vertex
-    unsigned int vertexBufferSize = vertexBuffer.positions.size();
-    std::vector<Vec4> transformedVB;
-    for (const Vec4 &v : vertexBuffer.positions)
+    //perspective divide
+    for (Vec4 &v : vertexBuffer.positions)
     {
-        Vec4 v4 = transformation * v;
-        if(abs(v4.w) > 0.01f) //geometric clipping will take care of negative and 0 w'.  So this line won't be necessary
-            transformedVB.emplace_back(v4.x/v4.w, v4.y/v4.w, v4.z/v4.w, 1.0f); //perspective division
+        if(abs(v.w) > 0.01f) //geometric clipping will take care of negative and 0 w'. 
+            v = {v.x/v.w, v.y/v.w, v.z/v.w, 1.0f}; 
         else
-            transformedVB.emplace_back(0.0f, 0.0f, 0.0f, 1.0f); //perspective division
+            v = {0.0f, 0.0f, 0.0f, 1.0f};
     }
+
 
     //draw each transformed vertex using index buffer
     char color[14];
     for(char i = 0; i < 14; ++i) {
-        color[i] = 255 - i * 16;
+        color[i] = 255 - i * 18;
     }
 
+    unsigned int vertexBufferSize = vertexBuffer.positions.size();
     for(unsigned int k = 0; k < vertexBuffer.indices.size(); ++k) 
     {
         const Index& i = vertexBuffer.indices.at(k);
@@ -189,20 +187,20 @@ void Screen::drawPolygon(const Vertex &vertexBuffer, const Mat4 &transformation)
         assert(i.y < vertexBufferSize);
         assert(i.z < vertexBufferSize);
         /*
-        float scale = transformedVB.at(i.x).z; //should be between 0 and 1 if inside screen
+        float scale = vertexBuffer.positions..at(i.x).z; //should be between 0 and 1 if inside screen
         scale *= scale;
         scale = 1.0f - scale;
         scale *= 255.0f;
         setColor(char(scale), char(scale), char(scale));
-        drawLine(transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.y).x, transformedVB.at(i.y).y);
-        drawLine(transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.z).x, transformedVB.at(i.z).y);
-        drawLine(transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.x).x, transformedVB.at(i.x).y);*/
+        drawLine(vertexBuffer.positions..at(i.x).x, vertexBuffer.positions..at(i.x).y, vertexBuffer.positions..at(i.y).x, vertexBuffer.positions..at(i.y).y);
+        drawLine(vertexBuffer.positions..at(i.y).x, vertexBuffer.positions..at(i.y).y, vertexBuffer.positions..at(i.z).x, vertexBuffer.positions..at(i.z).y);
+        drawLine(vertexBuffer.positions..at(i.z).x, vertexBuffer.positions..at(i.z).y, vertexBuffer.positions..at(i.x).x, vertexBuffer.positions..at(i.x).y);*/
 
 
         Vec3 vec[3];
-        vec[0] = {transformedVB.at(i.x).x, transformedVB.at(i.x).y, transformedVB.at(i.x).z};
-        vec[1] = {transformedVB.at(i.y).x, transformedVB.at(i.y).y, transformedVB.at(i.y).z};
-        vec[2] = {transformedVB.at(i.z).x, transformedVB.at(i.z).y, transformedVB.at(i.z).z};
+        vec[0] = {vertexBuffer.positions.at(i.x).x, vertexBuffer.positions.at(i.x).y, vertexBuffer.positions.at(i.x).z};
+        vec[1] = {vertexBuffer.positions.at(i.y).x, vertexBuffer.positions.at(i.y).y, vertexBuffer.positions.at(i.y).z};
+        vec[2] = {vertexBuffer.positions.at(i.z).x, vertexBuffer.positions.at(i.z).y, vertexBuffer.positions.at(i.z).z};
 
         setColor(200, 200, color[k]);
         fillTriangle(vec[0], vec[1], vec[2]);
