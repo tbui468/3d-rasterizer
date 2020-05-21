@@ -24,6 +24,7 @@ int main()
 
     Screen screen(800, 600);
 
+
     CoordinateTransformer ct(screen);
     Camera camera(ct);
 
@@ -61,7 +62,7 @@ int main()
     vertex.indices.emplace_back(3,7,8);
 
     Vertex floorVertex;
-    float f = 1000.0f;
+    float f = 100.0f;
     floorVertex.positions.emplace_back(-f, 3000.0f, -f, 1.0f);
     floorVertex.positions.emplace_back(f, 3000.0f, -f, 1.0f);
     floorVertex.positions.emplace_back(f, 3000.0f, f, 1.0f);
@@ -79,7 +80,7 @@ int main()
     e.moveBy({0.0f, s, 8000.0f});
     e2.moveBy({-1000.5f, 0.0f, 7840.5f});
     floor.moveBy({0.0f, 0.0f, 8000.0f});
-//    e3.moveBy({30.5f, 0.0f, 140.5f});
+    e3.moveBy({-1000.5f, 0.0f, 9900.5f});
 
     bool play = true;
     while (play)
@@ -149,8 +150,8 @@ int main()
 
         camera.draw(e.getDrawable());
         camera.draw(e2.getDrawable());
-        camera.draw(floor.getDrawable());
-//        camera.draw(e3.getDrawable());
+//        camera.draw(floor.getDrawable());
+        camera.draw(e3.getDrawable());
 
 
 

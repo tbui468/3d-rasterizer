@@ -52,7 +52,7 @@ bool Screen::initialize()
     m_buffer = new Uint32[SCREEN_WIDTH * SCREEN_HEIGHT];
     memset(m_buffer, 0, sizeof(Uint32) * SCREEN_WIDTH * SCREEN_HEIGHT);
 
-    m_zBuffer = new int[SCREEN_WIDTH * SCREEN_HEIGHT];
+    m_zBuffer = new float[SCREEN_WIDTH * SCREEN_HEIGHT];
     memset(m_zBuffer, 0, sizeof(float) * SCREEN_WIDTH * SCREEN_HEIGHT);
 
     SDL_SetWindowBordered(m_window, SDL_TRUE);
@@ -75,7 +75,7 @@ void Screen::setColor(uint32_t color) {
     m_color = color;
 }
 
-void Screen::putPixel(int x, int y, int z)
+void Screen::putPixel(int x, int y, float depth)
 {
     if(x < 0 || x > 799)
         return;
@@ -84,40 +84,35 @@ void Screen::putPixel(int x, int y, int z)
 
     int index = y * SCREEN_WIDTH + x;
     //check z-buffer
-    if(z < m_zBuffer[index]) {
-        m_zBuffer[index] = z;
+    if(depth < m_zBuffer[index]) {
+        m_zBuffer[index] = depth;
         m_buffer[index] = m_color;
     }
 }
 
-void Screen::drawLine(int x0, int y0, int z0, int x1, int y1, int z1)
+void Screen::drawLine(const Vec3& v0, const Vec3& v1)
 {
     /*BRESENHAM'S ALGORITHM*/
+    int x0 = int(v0.x);
+    int y0 = int(v0.y);
+    int x1 = int(v1.x);
+    int y1 = int(v1.y);
 
     int sx = x0 < x1 ? 1 : -1;  //chooses positive or negative increment for each iteration
     int sy = y0 < y1 ? 1 : -1; //same for y
-    int sz = z0 < z1 ? 1 : -1;
 
     int dx = abs(x1 - x0); //find horizontal distance between endpoints
     int dy = -abs(y1 - y0); //find vertical distance between endpoints (but negative????)
-    int dz = -abs(z1 - z0);
 
     if (dy == 0)
     { //horizontal line (used for rasterizing triangles)
-        int err = dx + dz;
         while(true) {
-            putPixel(x0, y0, z0);
-            if(x0 == x1 && z0 == z1)
+            float z = interpolateZ(v0, v1, {float(x0), float(y0), 0.0f});
+            putPixel(x0, y0, z);
+            if(x0 == x1)
                 break;
-            int e2 = 2 * err;
-            if(e2 >= dz) {
-                err += dz;
-                x0 += sx;
-            }
-            if(e2 <= dx) {
-                err += dx;
-                z0 += sz;
-            }
+
+            x0 += sx;
         }
     }/*
     else if (dx == 0)
@@ -247,21 +242,27 @@ void Screen::fillTriangle(const Vec3 &vec1, const Vec3 &vec2, const Vec3 &vec3)
         float b = bot->x - top->x;
         float c = top->x * bot->y - bot->x * top->y;
         Vec3 newMid;
-        if(abs(a) > 0.01f) 
+        if(abs(a) > 0.01f) {
             newMid = {(-b * mid->y - c) / a, mid->y, 0.0f};
-        else //vertical line (approx.) between top and bottom
+        }else{ //vertical line (approx.) between top and bottom
             newMid = {top->x, mid->y, 0.0f};
-        const Vec3* left = mid;
-        const Vec3* right = &newMid;
-        if(left->x > right->x)
+        }
+
+        float newZ = interpolateZ(*top, *bot, newMid);
+        newMid.z = newZ; //why is this a problem?
+
+        const Vec3 *left = mid;
+        const Vec3 *right = &newMid;
+        if (left->x > right->x)
             std::swap(left, right);
         fillBetweenLines(*top, *left, *top, *right);
         fillBetweenLines(*left, *bot, *right, *bot);
     }
-
 }
 
-void Screen::fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, const Vec3& v3) {
+void Screen::fillBetweenLines(const Vec3 &v0, const Vec3 &v1, const Vec3 &v2, const Vec3 &v3)
+{
+    //let's rewrite this to make it easier to read. fuck speed (for now anyway)
 
     //left line
     int x0l = int(v0.x);
@@ -301,21 +302,33 @@ void Screen::fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, co
 
     while (true)
     {
-        drawLine(x0l, y0l, z0l, x0r, y0r, z0r);
+        Vec3 vc0 = {float(x0l), float(y0l), float(z0l)};
+        Vec3 vc1 = {float(x0r), float(y0r), float(z0r)};
+
+        float z0 = interpolateZ(v0, v1, vc0);
+        vc0.z = z0;
+        float z1 = interpolateZ(v2, v3, vc1);
+        vc1.z = z1;
+
+        drawLine(vc0, vc1);
+
         if (y0r == y1l)
         {
             break;
         }
         //loop left until y0l is incremented by 1
-        while(true) {
-            if(x0l == x1l && y0l == y1l)
+        while (true)
+        {
+            if (x0l == x1l && y0l == y1l)
                 break;
-            int e2 = errl * 2; 
-            if(e2 >= dyl) {
+            int e2 = errl * 2;
+            if (e2 >= dyl)
+            {
                 errl += dyl;
                 x0l += sxl;
             }
-            if(e2 <= dxl){
+            if (e2 <= dxl)
+            {
                 errl += dxl;
                 y0l += syl;
                 break;
@@ -323,53 +336,57 @@ void Screen::fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, co
         }
 
         //loop y0lA (alternative) to keep track with y0l (and increment z0l at the same time)
-        while(y0lA != y0l) {
+        while (y0lA != y0l)
+        {
             int e2 = errlA * 2;
-            if(e2 >= dyl){
+            if (e2 >= dyl)
+            {
                 errlA += dyl;
                 z0l += szl;
             }
-            if(e2 <= dzl) {
+            if (e2 <= dzl)
+            {
                 errlA += dzl;
                 y0lA += syl;
             }
         }
 
         //loop right until y0r is incremented by 1 (and equal to y0l)
-        while(true) {
-            if(x0r == x1r && y0r == y1r)
+        while (true)
+        {
+            if (x0r == x1r && y0r == y1r)
                 break;
-            int e2 = errr * 2; 
-            if(e2 >= dyr) {
+            int e2 = errr * 2;
+            if (e2 >= dyr)
+            {
                 errr += dyr;
                 x0r += sxr;
             }
-            if(e2 <= dxr){
+            if (e2 <= dxr)
+            {
                 errr += dxr;
                 y0r += syr;
                 break;
             }
         }
 
-
         //loop y0lA (alternative) to keep track with y0l (and increment z0l at the same time)
-        while(y0rA != y0r) {
+        while (y0rA != y0r)
+        {
             int e2 = errrA * 2;
-            if(e2 >= dyr){
+            if (e2 >= dyr)
+            {
                 errrA += dyr;
                 z0r += szr;
             }
-            if(e2 <= dzr) {
+            if (e2 <= dzr)
+            {
                 errrA += dzr;
                 y0rA += syr;
             }
         }
-        
     }
 }
-
-
-
 
 void Screen::render()
 {
@@ -387,7 +404,7 @@ void Screen::clear()
     {
         for (int row = 0; row < SCREEN_HEIGHT; ++row)
         {
-            putPixel(col, row, 0);
+            putPixel(col, row, 0.0f);
         }
     }
 
@@ -470,11 +487,40 @@ Input Screen::getNextEvent()
 }
 
 //resets z-buffer values to inifinity
-void Screen::resetZBuffer() {
-    for(int row = 0; row < SCREEN_HEIGHT; ++row) {
-        for(int col = 0; col < SCREEN_WIDTH; ++col) {
-            m_zBuffer[row * SCREEN_WIDTH + col] = 10000;
+void Screen::resetZBuffer()
+{
+    for (int row = 0; row < SCREEN_HEIGHT; ++row)
+    {
+        for (int col = 0; col < SCREEN_WIDTH; ++col)
+        {
+            m_zBuffer[row * SCREEN_WIDTH + col] = 10000.0f;
         }
+    }
+}
+
+//interpolate z at vc using v0 and v1
+//
+float Screen::interpolateZ(const Vec3 &v0, const Vec3 &v1, const Vec3 &vc)
+{
+    if (v1.x - v0.x > 0.001f)
+    {
+        float dx = v1.x - v0.x;
+        float cx = vc.x - v0.x;
+        float xPercent = cx / dx;
+
+        float dz = v1.z - v0.z;
+
+        return dz * xPercent + v0.z;
+    }
+    else
+    {
+        float dy = v1.y - v0.y;
+        float cy = vc.y - v0.y;
+        float yPercent = cy / dy;
+
+        float dz = v1.z - v0.z;
+
+        return dz * yPercent + v0.z;
     }
 }
 
