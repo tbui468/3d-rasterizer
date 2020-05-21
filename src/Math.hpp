@@ -392,7 +392,7 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
             float t = 300.0f;
             float b = -300.0f;
             float n = 200.0f; //near clipping plane
-            float f = 1000.0f; //far clipping plane
+            float f = 10000.0f; //far clipping plane
 
             m.firstCol.x = 2.0f / (r - l);
             m.secondCol.y = 2.0f / (t - b); 
@@ -414,7 +414,6 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         else
             return false;
     }
-
 
 
     struct Plane {

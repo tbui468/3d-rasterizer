@@ -156,10 +156,6 @@ int main()
 
 //        screen.drawLine(0.0f, 300.0f, 800.0f, 300.0f);
 
-        Vec3 eLoc = e.getPosition();
-        Vec3 loc = camera.getLocation();
-        Vec3 dis = eLoc - loc;
-        std::cout << dis.magnitude() << std::endl;
 
         screen.render();
     }

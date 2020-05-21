@@ -12,7 +12,7 @@ namespace paint {
 //y axis: down is negative and up is positive
 class CoordinateTransformer {
 private: 
-    inline static Vec3 m_scale {400.0f, -300.0f, 1000.0f};
+    inline static Vec3 m_scale {400.0f, -300.0f, 3000.0f};
     inline static Vec3 m_offset {400.0f, 300.0f, 0.0f};
     Screen* m_screen;
 public:
