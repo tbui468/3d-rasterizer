@@ -435,6 +435,14 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         return line.point + line.direction * scalar;
     }
 
+    static Vec3 getIntersection(Vec4 v1, Vec4 v2) {
+        float a = (v1.z * (-1.0f)) / (v2.z - v1.z);
+        Vec4 ret = v1 * (1.0f - a) + v2 * a;
+        return {ret.x, ret.y, ret.z};
+    }
+
+
+
 
 } // namespace paint
 

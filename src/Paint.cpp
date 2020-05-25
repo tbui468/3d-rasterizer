@@ -62,13 +62,17 @@ int main()
     vertex.indices.emplace_back(3,7,8);
 
     Vertex floorVertex;
-    float f = 100.0f;
-    floorVertex.positions.emplace_back(-f, 3000.0f, -f, 1.0f);
-    floorVertex.positions.emplace_back(f, 3000.0f, -f, 1.0f);
-    floorVertex.positions.emplace_back(f, 3000.0f, f, 1.0f);
-    floorVertex.positions.emplace_back(-f, 3000.0f, f, 1.0f);
-    floorVertex.indices.emplace_back(0, 1, 2);
-    floorVertex.indices.emplace_back(0, 2, 3);
+    float f = 500.0f;
+    floorVertex.positions.emplace_back(-f, -f , -f - 100.0f, 1.0f);
+    floorVertex.positions.emplace_back(f, -f, -f - 100.0f, 1.0f);
+    floorVertex.positions.emplace_back(f, f, -f - 100.0f, 1.0f);
+    floorVertex.positions.emplace_back(-f, f, -f - 100.0f, 1.0f);
+    floorVertex.positions.emplace_back(f, -f, f - 100.0f, 1.0f);
+    floorVertex.positions.emplace_back(f, f, f - 100.0f, 1.0f);
+    floorVertex.indices.emplace_back(0, 2, 1);
+    floorVertex.indices.emplace_back(0, 3, 2);
+    floorVertex.indices.emplace_back(1, 5, 4);
+    floorVertex.indices.emplace_back(1, 2, 5);
 
 
     Entity e(vertex);
@@ -77,10 +81,12 @@ int main()
     Entity floor(floorVertex);
 
     e.scaleBy({0.0f, 1.0f, 0.0f});
-    e.moveBy({0.0f, s, 8000.0f});
-    e2.moveBy({-1000.5f, 0.0f, 7840.5f});
-    floor.moveBy({0.0f, 0.0f, 8000.0f});
-    e3.moveBy({-1000.5f, 0.0f, 9900.5f});
+    e.moveBy({0.0f, s, 9000.0f});
+    e.rotateBy(3.14f);
+    e2.moveBy({-2000.5f, 0.0f, 8040.5f});
+    e2.rotateBy(3.14f/2.0f);
+    floor.moveBy({0.0f, 0.0f, 1000.0f});
+    e3.moveBy({-2000.5f, 0.0f, 9900.5f});
 
     bool play = true;
     while (play)
@@ -148,10 +154,10 @@ int main()
 
         screen.setColor(255, 255, 255);
 
-        camera.draw(e.getDrawable());
+ //       camera.draw(e.getDrawable());
         camera.draw(e2.getDrawable());
 //        camera.draw(floor.getDrawable());
-        camera.draw(e3.getDrawable());
+   //     camera.draw(e3.getDrawable());
 
 
 

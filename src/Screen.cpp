@@ -114,11 +114,12 @@ void Screen::drawLine(const Vec3& v0, const Vec3& v1)
 
             x0 += sx;
         }
-    }/*
+    }
     else if (dx == 0)
-    { //vertical line (NOT USED NOW)
+    { //vertical line 
         while(true) {
-            putPixel(x0, y0, 0.0f);
+            float z = interpolateZ(v0, v1, {float(x0), float(y0), 0.0f});
+            putPixel(x0, y0, z);
             if(y0 == y1)
                 break;
             y0 += sy;
@@ -126,11 +127,12 @@ void Screen::drawLine(const Vec3& v0, const Vec3& v1)
     }
     else
     {
-        int err = dx + dy; //????Not sure what is happening here.  Initializing err (NOT USED NOW)
+        int err = dx + dy; //????Not sure what is happening here.  Initializing err (
 
         while (true)
         {
-            putPixel(x0, y0, 0.0f); //draw pixel at x0, y0
+            float z = interpolateZ(v0, v1, {float(x0), float(y0), 0.0f});
+            putPixel(x0, y0, z); //draw pixel at x0, y0
             if (x0 == x1 && y0 == y1) //leave loop if both points are on the same pixel
             {
                 break;
@@ -147,7 +149,7 @@ void Screen::drawLine(const Vec3& v0, const Vec3& v1)
                 y0 += sy; //increment by 1 closer to y1
             }
         }
-    }*/
+    }
 }
 
 //draw model(THis can be processed by GPU for better performance, such as using CUDA)
@@ -158,10 +160,10 @@ void Screen::drawPolygon(Vertex &vertexBuffer)
     //perspective divide
     for (Vec4 &v : vertexBuffer.positions)
     {
-        if(abs(v.w) > 0.01f) //geometric clipping will take care of negative and 0 w'. 
+        if(abs(v.w) >= 200.0f) //geometric clipping will take care of negative and 0 w'. 
             v = {v.x/v.w, v.y/v.w, v.z/v.w, 1.0f}; 
-        else
-            v = {0.0f, 0.0f, 0.0f, 1.0f};
+        //else
+         //   v = {0.0f, 0.0f, 0.0f, 1.0f};
     }
 
 
@@ -181,21 +183,25 @@ void Screen::drawPolygon(Vertex &vertexBuffer)
         assert(i.x < vertexBufferSize);
         assert(i.y < vertexBufferSize);
         assert(i.z < vertexBufferSize);
-        /*
-        float scale = vertexBuffer.positions..at(i.x).z; //should be between 0 and 1 if inside screen
+
+       /* 
+        float scale = vertexBuffer.positions.at(i.x).z; //should be between 0 and 1 if inside screen
         scale *= scale;
         scale = 1.0f - scale;
         scale *= 255.0f;
-        setColor(char(scale), char(scale), char(scale));
-        drawLine(vertexBuffer.positions..at(i.x).x, vertexBuffer.positions..at(i.x).y, vertexBuffer.positions..at(i.y).x, vertexBuffer.positions..at(i.y).y);
-        drawLine(vertexBuffer.positions..at(i.y).x, vertexBuffer.positions..at(i.y).y, vertexBuffer.positions..at(i.z).x, vertexBuffer.positions..at(i.z).y);
-        drawLine(vertexBuffer.positions..at(i.z).x, vertexBuffer.positions..at(i.z).y, vertexBuffer.positions..at(i.x).x, vertexBuffer.positions..at(i.x).y);*/
-
+        setColor(char(scale), char(scale), char(scale));*/
 
         Vec3 vec[3];
         vec[0] = {vertexBuffer.positions.at(i.x).x, vertexBuffer.positions.at(i.x).y, vertexBuffer.positions.at(i.x).z};
         vec[1] = {vertexBuffer.positions.at(i.y).x, vertexBuffer.positions.at(i.y).y, vertexBuffer.positions.at(i.y).z};
         vec[2] = {vertexBuffer.positions.at(i.z).x, vertexBuffer.positions.at(i.z).y, vertexBuffer.positions.at(i.z).z};
+
+/*
+        drawLine(vec[0], vec[1]);
+        drawLine(vec[1], vec[2]);
+        drawLine(vec[2], vec[0]);*/
+
+        
 
         setColor(200, 200, color[k]);
         fillTriangle(vec[0], vec[1], vec[2]);
@@ -249,7 +255,7 @@ void Screen::fillTriangle(const Vec3 &vec1, const Vec3 &vec2, const Vec3 &vec3)
         }
 
         float newZ = interpolateZ(*top, *bot, newMid);
-        newMid.z = newZ; //why is this a problem?
+        newMid.z = newZ; 
 
         const Vec3 *left = mid;
         const Vec3 *right = &newMid;

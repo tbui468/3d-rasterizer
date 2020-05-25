@@ -35,6 +35,9 @@ public:
         //viewport mapping
         drawable.applyTransformation(Mat4::translate(m_offset) * Mat4::scale(m_scale));
 
+//        std::cout << drawable.getVertexPositionSize() << std::endl;
+        std::cout << drawable.getVertexPositionSize() << std::endl;
+
         drawable.draw(*m_screen);
     }
 

@@ -59,10 +59,10 @@ public:
     Input getNextEvent(); //get next event from m_inputs, removing it from vector
     inline bool hasEvents() const { return m_inputs.size() > 0;};
     void close();
-    float interpolateZ(const Vec3& v0, const Vec3& v1, const Vec3& vc);
 private:
     void fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, const Vec3& v3);
     void resetZBuffer(); //sets z buffer distances to infinity (large number)
+    float interpolateZ(const Vec3& v0, const Vec3& v1, const Vec3& vc);
 };
 
 }

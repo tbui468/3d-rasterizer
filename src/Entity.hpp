@@ -21,7 +21,7 @@ public:
             m_vertexBuffer (vertex),
             m_scale({1.0f, 1.0f, 1.0f}),
             m_angle (0.0f),
-            m_rotationAxis ({.0f, 1.0f, 1.0f}),
+            m_rotationAxis ({0.0f, 1.0f, 0.0f}),
             m_translation({0.0f, 0.0f, 0.0f}),
             m_color(0x000000ff)
             {};
