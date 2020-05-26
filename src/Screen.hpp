@@ -6,6 +6,7 @@
 #include <vector>
 #include "Math.hpp"
 #include "Vertex.hpp"
+#include "Texture.hpp"
 
 namespace paint {
 
@@ -59,6 +60,7 @@ public:
     Input getNextEvent(); //get next event from m_inputs, removing it from vector
     inline bool hasEvents() const { return m_inputs.size() > 0;};
     void close();
+    void drawTexture(int x, int y, const Texture& texture);
 private:
     void fillBetweenLines(const Vec3& v0, const Vec3& v1, const Vec3& v2, const Vec3& v3);
     void resetZBuffer(); //sets z buffer distances to infinity (large number)

@@ -14,12 +14,15 @@
 #include "Entity.hpp"
 #include "Camera.hpp"
 #include "CoordinateTransformer.hpp"
+#include "Texture.hpp"
 
 using namespace paint;
 
 
 int main()
 {
+
+//    Texture tex("../../src/texture.bmp");
 
 
     Screen screen(800, 600);
@@ -41,6 +44,9 @@ int main()
     vertex.positions.emplace_back(s, s, s, 1.0f);
     vertex.positions.emplace_back(-s, s, s, 1.0f);
     vertex.positions.emplace_back(0.0f, 2* s, 0.0f, 1.0f);
+
+
+
     //change order of vertices so that 
     //first index is initial position of v1 and v2
     //and second and third indices are endpoints of v1 and v2, respectively
@@ -48,8 +54,8 @@ int main()
     vertex.indices.emplace_back(0, 3, 2);
     vertex.indices.emplace_back(0, 7, 3);
     vertex.indices.emplace_back(0, 4, 7);
-    vertex.indices.emplace_back(0, 5, 4);
-    vertex.indices.emplace_back(0, 1, 5);
+    //vertex.indices.emplace_back(0, 5, 4);
+    //vertex.indices.emplace_back(0, 1, 5);
     vertex.indices.emplace_back(6, 5, 1);
     vertex.indices.emplace_back(6, 1, 2);
     vertex.indices.emplace_back(6, 2, 3);
@@ -82,9 +88,10 @@ int main()
 
     e.scaleBy({0.0f, 1.0f, 0.0f});
     e.moveBy({0.0f, s, 9000.0f});
-    e.rotateBy(3.14f);
+    e.rotateBy(.8f);
     e2.moveBy({-2000.5f, 0.0f, 8040.5f});
-    e2.rotateBy(3.14f/2.0f);
+    e2.scaleBy({1.0f, 0.0f, 1.0f});
+    e2.rotateBy(3.14f/8.0f);
     floor.moveBy({0.0f, 0.0f, 1000.0f});
     e3.moveBy({-2000.5f, 0.0f, 9900.5f});
 
@@ -154,14 +161,15 @@ int main()
 
         screen.setColor(255, 255, 255);
 
- //       camera.draw(e.getDrawable());
+        camera.draw(e.getDrawable());
         camera.draw(e2.getDrawable());
 //        camera.draw(floor.getDrawable());
-   //     camera.draw(e3.getDrawable());
+        camera.draw(e3.getDrawable());
 
 
 
 //        screen.drawLine(0.0f, 300.0f, 800.0f, 300.0f);
+
 
 
         screen.render();

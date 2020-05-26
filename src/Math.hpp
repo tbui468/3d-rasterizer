@@ -387,7 +387,7 @@ std::ostream& operator<<(std::ostream& os, const Mat2& mat) {
         static Mat4 orthogonal() {
             Mat4 m;
 
-            float l = -400.0f; //
+            float l = -400.0f; 
             float r = 400.0f;
             float t = 300.0f;
             float b = -300.0f;

@@ -104,6 +104,10 @@ void Screen::drawLine(const Vec3& v0, const Vec3& v1)
     int dx = abs(x1 - x0); //find horizontal distance between endpoints
     int dy = -abs(y1 - y0); //find vertical distance between endpoints (but negative????)
 
+    //use dx to interpolate texture
+    //but 
+
+
     if (dy == 0)
     { //horizontal line (used for rasterizing triangles)
         while(true) {
@@ -170,8 +174,11 @@ void Screen::drawPolygon(Vertex &vertexBuffer)
     //draw each transformed vertex using index buffer
     char color[14];
     for(char i = 0; i < 14; ++i) {
-        color[i] = 255 - i * 18;
+        //color[i] = 255 - i * 18;
+        color[i] = 150;
     }
+
+
 
     unsigned int vertexBufferSize = vertexBuffer.positions.size();
     for(unsigned int k = 0; k < vertexBuffer.indices.size(); ++k) 
@@ -201,9 +208,9 @@ void Screen::drawPolygon(Vertex &vertexBuffer)
         drawLine(vec[1], vec[2]);
         drawLine(vec[2], vec[0]);*/
 
-        
-
-        setColor(200, 200, color[k]);
+        //set color based how much triangle is turned towards light source 
+        char c = 230 * vertexBuffer.shadingLevel.at(k) + 25;
+        setColor(c, c, c);
         fillTriangle(vec[0], vec[1], vec[2]);
     }
 }
@@ -316,6 +323,7 @@ void Screen::fillBetweenLines(const Vec3 &v0, const Vec3 &v1, const Vec3 &v2, co
         float z1 = interpolateZ(v2, v3, vc1);
         vc1.z = z1;
 
+        //draw horizontal line (y0l == y0r)
         drawLine(vc0, vc1);
 
         if (y0r == y1l)
@@ -544,6 +552,20 @@ void Screen::close()
     m_renderer = nullptr;
     m_window = nullptr;
     SDL_Quit();
+}
+
+
+void Screen::drawTexture(int x, int y, const Texture& texture) {
+    Uint32* buffer = texture.getTexture();
+    unsigned int width = texture.getWidth();
+    unsigned int height = texture.getHeight();
+
+    for(unsigned int row = 0; row < width; ++row) {
+        for(unsigned int col = 0; col < height; ++col) {
+            setColor(buffer[row * width + col]);
+            putPixel(col + x, row + y, 0.0f);
+        }
+    }
 }
 
 } // namespace paint

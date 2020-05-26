@@ -2,6 +2,7 @@
 #define VERTEX_H
 
 #include "Math.hpp"
+#include "Texture.hpp"
 #include <vector>
 
 namespace paint {
@@ -9,7 +10,8 @@ namespace paint {
 struct Vertex {
     std::vector<Vec4> positions; 
     std::vector<Index> indices; 
-    std::vector<bool> cullFlags;  
+    std::vector<float> shadingLevel; //float 0 - 1 (multiple by color values to simulate lighting)
+    std::vector<bool> cullFlags;  //each cull flag is associated with an index
 };
 
 }
