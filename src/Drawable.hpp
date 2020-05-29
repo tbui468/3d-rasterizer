@@ -49,20 +49,14 @@ public:
         for(const Index& i : m_vertexBuffer.indices) {
             //get vector from origin to first point on 
             Vec4 vertexPosX = m_vertexBuffer.positions.at(i.x);
-            Vec4 vertexPosY = m_vertexBuffer.positions.at(i.y);
-            Vec4 vertexPosZ = m_vertexBuffer.positions.at(i.z);
             Vec4 origin = {0.0f, 0.0f, 0.0f, 0.0f};
             Vec4 triDir = vertexPosX - origin;
             
-            Vec4 v1 = vertexPosY - vertexPosX;
-            Vec4 v2 = vertexPosZ - vertexPosX;
 
             //clip Vec4 to Vec3
-            Vec3 v1c = {v1.x, v1.y, v1.z};
-            Vec3 v2c = {v2.x, v2.y, v2.z};
             Vec3 triDirc {triDir.x, triDir.y, triDir.z};
 
-            Vec3 normal = v1c.crossProduct(v2c);
+            Vec3 normal = getNormal(i);
             
             if(triDirc * normal > 0.0f) {
                 m_vertexBuffer.cullFlags.push_back(true);
@@ -70,13 +64,16 @@ public:
                 m_vertexBuffer.cullFlags.push_back(false);
             }
 
+        }
+    }
+
+    void computeFlatShading(const Vec3& light) {
+        m_vertexBuffer.shadingLevel.clear();
+        Vec3 lightNormal = light * (1.0f / light.magnitude());
+        for(const Index& i: m_vertexBuffer.indices) {
             //set flat shading level based on normal
-            normal = normal * (1.0f / normal.magnitude());
-            Vec3 lightSource = {1000.0f, 1000.0f, -1000.0f};
-            Vec3 v0 = {vertexPosX.x, vertexPosX.y, vertexPosX.z};
-            Vec3 light = lightSource - v0;
-            light = light * (1.0f / light.magnitude());
-            float c = light * normal;
+            Vec3 normal = getNormal(i);
+            float c = lightNormal * normal;
             if (c >= 0)
                 m_vertexBuffer.shadingLevel.push_back(c);
             else
@@ -207,6 +204,24 @@ public:
     unsigned int getVertexIndexSize() const
     {
         return m_vertexBuffer.indices.size();
+    }
+
+    //get normal vector of given index (triangle)
+    Vec3 getNormal(const Index& i) const {
+        Vec4 v0 = m_vertexBuffer.positions.at(i.x);
+        Vec4 v1 = m_vertexBuffer.positions.at(i.y);
+        Vec4 v2 = m_vertexBuffer.positions.at(i.z);
+
+        Vec4 vA = v1 - v0;
+        Vec4 vB = v2 - v0;
+
+        Vec3 vA3 = {vA.x, vA.y, vA.z};
+        Vec3 vB3 = {vB.x, vB.y, vB.z};
+
+        Vec3 normal = vA3.crossProduct(vB3);
+        normal = normal * (1.0f / normal.magnitude());
+
+        return normal;
     }
 };
 

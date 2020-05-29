@@ -166,18 +166,7 @@ void Screen::drawPolygon(Vertex &vertexBuffer)
     {
         if(abs(v.w) >= 200.0f) //geometric clipping will take care of negative and 0 w'. 
             v = {v.x/v.w, v.y/v.w, v.z/v.w, 1.0f}; 
-        //else
-         //   v = {0.0f, 0.0f, 0.0f, 1.0f};
     }
-
-
-    //draw each transformed vertex using index buffer
-    char color[14];
-    for(char i = 0; i < 14; ++i) {
-        //color[i] = 255 - i * 18;
-        color[i] = 150;
-    }
-
 
 
     unsigned int vertexBufferSize = vertexBuffer.positions.size();
@@ -191,12 +180,6 @@ void Screen::drawPolygon(Vertex &vertexBuffer)
         assert(i.y < vertexBufferSize);
         assert(i.z < vertexBufferSize);
 
-       /* 
-        float scale = vertexBuffer.positions.at(i.x).z; //should be between 0 and 1 if inside screen
-        scale *= scale;
-        scale = 1.0f - scale;
-        scale *= 255.0f;
-        setColor(char(scale), char(scale), char(scale));*/
 
         Vec3 vec[3];
         vec[0] = {vertexBuffer.positions.at(i.x).x, vertexBuffer.positions.at(i.x).y, vertexBuffer.positions.at(i.x).z};

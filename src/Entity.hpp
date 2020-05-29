@@ -15,15 +15,13 @@ private:
     float m_angle;
     Vec3 m_rotationAxis;
     Vec3 m_translation;
-    uint32_t m_color;
 public:
     Entity(Vertex vertex) :
             m_vertexBuffer (vertex),
             m_scale({1.0f, 1.0f, 1.0f}),
             m_angle (0.0f),
-            m_rotationAxis ({0.0f, 1.0f, 0.0f}),
-            m_translation({0.0f, 0.0f, 0.0f}),
-            m_color(0x000000ff)
+            m_rotationAxis ({0.0f, 1.0f, 1.0f}),
+            m_translation({0.0f, 0.0f, 0.0f})
             {};
 
     
@@ -68,9 +66,6 @@ public:
         m_translation.z += translation.z;
     }
 
-    void setColor(uint32_t color) {
-        m_color = color;
-    }
 
     Vec3 getPosition() const {
         return m_translation;

@@ -4,6 +4,7 @@
 #include "Math.hpp"
 #include "Drawable.hpp"
 #include "Screen.hpp"
+#include "Entity.hpp"
 
 namespace paint {
 //for normalizing coordinate system
@@ -14,15 +15,18 @@ class CoordinateTransformer {
 private: 
     inline static Vec3 m_scale {400.0f, -300.0f, 1.0f};
     inline static Vec3 m_offset {400.0f, 300.0f, 0.0f};
+    Entity* m_light;
     Screen* m_screen;
 public:
-    CoordinateTransformer(Screen& screen) : m_screen(&screen) {};
+    CoordinateTransformer(Screen& screen, Entity* light) : m_screen(&screen), m_light(light) {};
 
     void draw(Drawable& drawable) {
         drawable.clearCullFlags();
 
         //backface culling before perspective transform
         drawable.cullBackfaces();
+
+        drawable.computeFlatShading(m_light->getPosition());
 
         //perspective transformation
         drawable.applyTransformation(Mat4::perspective());
@@ -35,11 +39,9 @@ public:
         //viewport mapping
         drawable.applyTransformation(Mat4::translate(m_offset) * Mat4::scale(m_scale));
 
-//        std::cout << drawable.getVertexPositionSize() << std::endl;
-//        std::cout << drawable.getVertexPositionSize() << std::endl;
-
         drawable.draw(*m_screen);
     }
+
 
 };
 

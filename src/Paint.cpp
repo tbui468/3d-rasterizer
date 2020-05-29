@@ -27,14 +27,62 @@ int main()
 
     Screen screen(800, 600);
 
+    //regular icosahedron (20 sided die)
+    Vertex v;
+    float se = 200.0f;
+    float l = se * ((1.0f + sqrt(5.0f)) / 2.0f);
 
-    CoordinateTransformer ct(screen);
-    Camera camera(ct);
+    //12 vertices
+    //light green plane
+    v.positions.emplace_back(-se, -l, 0.0f, 1.0f); //l0
+    v.positions.emplace_back(se, -l, 0.0f, 1.0f); //l1
+    v.positions.emplace_back(se, l, 0.0f, 1.0f); //l2
+    v.positions.emplace_back(-se, l, 0.0f, 1.0f); //l3
+
+    //purple plane
+    v.positions.emplace_back(0.0f, -se, -l, 1.0f); //p0
+    v.positions.emplace_back(0.0f, se, -l, 1.0f); //p1
+    v.positions.emplace_back(0.0f, se, l, 1.0f); //p2
+    v.positions.emplace_back(0.0f, -se, l, 1.0f); //p3
+
+    //dark green plane
+    v.positions.emplace_back(-l, 0.0f, -se, 1.0f); //d0
+    v.positions.emplace_back(l, 0.0f, -se, 1.0f); //d1
+    v.positions.emplace_back(l, 0.0f, se, 1.0f); //d2
+    v.positions.emplace_back(-l, 0.0f, se, 1.0f); //d3
+
+    //20 faces
+    v.indices.emplace_back(0,11,7);
+    v.indices.emplace_back(11,6,7);
+    v.indices.emplace_back(0,7,1);
+    v.indices.emplace_back(7,6,10);
+    v.indices.emplace_back(7,10,1);
+    v.indices.emplace_back(0,1,4);
+    v.indices.emplace_back(4,1,9);
+    v.indices.emplace_back(1,10,9);
+    v.indices.emplace_back(10,2,9);
+    v.indices.emplace_back(6,2,10);
+
+    //top right cap (2)
+    v.indices.emplace_back(11,3,6);
+    v.indices.emplace_back(3,2,6);
+    //bottom left cap (3)
+    v.indices.emplace_back(0,4,8);
+    v.indices.emplace_back(8,4,5);
+    v.indices.emplace_back(4,9,5);
+
+    //reverse of center ring (5)
+    v.indices.emplace_back(0,8,11);
+    v.indices.emplace_back(5,9,2);
+
+    v.indices.emplace_back(11,8,3);
+    v.indices.emplace_back(8,5,3);
+    v.indices.emplace_back(3,5,2);
 
     //USING LEFT HAND COORDINATES (BUT I FUCKED UP AND WANTED TO USE RIGHT HAND)
     //create test entity
     Vertex vertex;
-    float s = 200.0f;
+    constexpr float s = 200.0f;
     vertex.positions.emplace_back(-s, -s, -s, 1.0f);
     vertex.positions.emplace_back(s, -s, -s, 1.0f);
     vertex.positions.emplace_back(s, s, -s, 1.0f);
@@ -67,33 +115,29 @@ int main()
     vertex.indices.emplace_back(6,8,7);
     vertex.indices.emplace_back(3,7,8);
 
-    Vertex floorVertex;
-    float f = 500.0f;
-    floorVertex.positions.emplace_back(-f, -f , -f - 100.0f, 1.0f);
-    floorVertex.positions.emplace_back(f, -f, -f - 100.0f, 1.0f);
-    floorVertex.positions.emplace_back(f, f, -f - 100.0f, 1.0f);
-    floorVertex.positions.emplace_back(-f, f, -f - 100.0f, 1.0f);
-    floorVertex.positions.emplace_back(f, -f, f - 100.0f, 1.0f);
-    floorVertex.positions.emplace_back(f, f, f - 100.0f, 1.0f);
-    floorVertex.indices.emplace_back(0, 2, 1);
-    floorVertex.indices.emplace_back(0, 3, 2);
-    floorVertex.indices.emplace_back(1, 5, 4);
-    floorVertex.indices.emplace_back(1, 2, 5);
+
+    //light source
+    Vertex lv;
+    Entity light(lv);
+
+
+    CoordinateTransformer ct(screen, &light);
+    Camera camera(ct);
+
+
 
 
     Entity e(vertex);
-    Entity e2(vertex);
+    Entity e2(v);
     Entity e3(vertex);
-    Entity floor(floorVertex);
 
     e.scaleBy({0.0f, 1.0f, 0.0f});
     e.moveBy({0.0f, s, 9000.0f});
     e.rotateBy(.8f);
     e2.moveBy({-2000.5f, 0.0f, 8040.5f});
-    e2.scaleBy({1.0f, 0.0f, 1.0f});
     e2.rotateBy(3.14f/8.0f);
-    floor.moveBy({0.0f, 0.0f, 1000.0f});
     e3.moveBy({-2000.5f, 0.0f, 9900.5f});
+    light.moveBy({1000.0f, 1000.0f, -1000.0f});
 
     bool play = true;
     while (play)
@@ -147,14 +191,18 @@ int main()
                 camera.moveBy({0.01f, 0.0f, 0.0f});
                 break;
             case Input::CameraZoomIn: 
-                camera.moveBy({0.0f, 0.0f, 1.01f});
+                light.moveBy({-10.0f, 0.0f, 0.0f});
                 break;
             case Input::CameraZoomOut:
-                camera.moveBy({0.0f, 0.0f, -1.01f});
+                light.moveBy({10.0f, 0.0f, 0.0f});
                 break;
             case Input::CameraRotateCW:
+//                light.moveBy({0.0f, 0.0f, 10.0f});
+                e2.rotateBy(.1f);
                 break;
             case Input::CameraRotateCCW:
+ //               light.moveBy({0.0f, 0.0f, -10.0f});
+                e2.rotateBy(-.1f);
                 break;
             }
         }
@@ -163,8 +211,8 @@ int main()
 
         camera.draw(e.getDrawable());
         camera.draw(e2.getDrawable());
-//        camera.draw(floor.getDrawable());
         camera.draw(e3.getDrawable());
+        camera.draw(light.getDrawable());
 
 
 
