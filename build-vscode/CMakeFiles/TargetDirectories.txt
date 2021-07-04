@@ -1,5 +1,0 @@
-C:/dev/3dGraphics/build-vscode/CMakeFiles/edit_cache.dir
-C:/dev/3dGraphics/build-vscode/CMakeFiles/rebuild_cache.dir
-C:/dev/3dGraphics/build-vscode/src/CMakeFiles/Paint.dir
-C:/dev/3dGraphics/build-vscode/src/CMakeFiles/edit_cache.dir
-C:/dev/3dGraphics/build-vscode/src/CMakeFiles/rebuild_cache.dir
